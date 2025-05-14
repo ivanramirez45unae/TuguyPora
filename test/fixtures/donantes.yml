@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  tipo_sanguineo: MyString
+  peso_kg: 1.5
+  estatura_cm: 1.5
+  tiene_tatuajes: false
+  ult_donacion_fecha: 2025-04-23
+  ult_donacion_verificado: false
+
+two:
+  user: two
+  tipo_sanguineo: MyString
+  peso_kg: 1.5
+  estatura_cm: 1.5
+  tiene_tatuajes: false
+  ult_donacion_fecha: 2025-04-23
+  ult_donacion_verificado: false

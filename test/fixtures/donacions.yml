@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  donor_id: 1
+  request_id: 1
+  location_id: 1
+  fecha_donacion: 2025-04-23
+  volumen_ml: 1
+  tipo_sangre: MyString
+  verificado_por_usuario: 1
+
+two:
+  user_id: 1
+  donor_id: 1
+  request_id: 1
+  location_id: 1
+  fecha_donacion: 2025-04-23
+  volumen_ml: 1
+  tipo_sangre: MyString
+  verificado_por_usuario: 1

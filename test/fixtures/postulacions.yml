@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  request_id: 1
+  location_id: 1
+  fecha_tentativa: 2025-04-23
+  hora_tentativa: 2025-04-23 23:55:38
+  estado: MyString
+
+two:
+  user_id: 1
+  request_id: 1
+  location_id: 1
+  fecha_tentativa: 2025-04-23
+  hora_tentativa: 2025-04-23 23:55:38
+  estado: MyString
