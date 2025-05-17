@@ -1,0 +1,20 @@
+<div style="background-color: #c00000; padding: 10px; text-align: center; color: white; font-weight: bold;">
+  Donación de sangre Itapúa
+</div>
+
+<nav style="display: flex; background-color: #ffd2bd; border: 2px solid black;">
+  <a href="#" style="flex: 1; background-color: red; color: white; font-weight: bold; text-align: center; padding: 10px; border-right: 2px solid black;">INICIO</a>
+  <a href="#" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Información y requisitos</a>
+<a href="<%= solicitudes_path %>" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Solicitudes</a>
+
+  <div style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">❤️</div>
+  <a href="#" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Mi perfil</a>
+  <div style="flex: 1; text-align: center; padding: 10px;">
+  <div style="flex: 1; text-align: center; padding: 10px;">
+  <%= button_to destroy_user_session_path, method: :delete, style: "background-color: #c00000; color: white; font-weight: bold; padding: 10px; border: none; cursor: pointer;", data: { turbo: false, confirm: '¿Está seguro de que quiere cerrar sesión?' } do %>
+    Cerrar sesión
+  <% end %>
+</div>
+
+
+</nav>
