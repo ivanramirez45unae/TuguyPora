@@ -1,0 +1,48 @@
+<%= form_with(model: @solicitud, local: true) do |form| %>
+  <% if @solicitud.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@solicitud.errors.count, "error") %> prohibited this solicitud from being saved:</h2>
+      <ul>
+        <% @solicitud.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="field"> 
+        <%= form.label :nombre_paciente %>
+        <%= form.text_field :nombre_paciente, required: true %>
+    </div>
+
+    <div class="field">
+        <%= form.label :cin_paciente, "Cédula de Identidad del Paciente" %>
+        <%= form.text_field :cin_paciente, placeholder: "Ingrese la cédula del paciente", required: true, pattern: "[0-9]{7,8}", title: "Debe tener 7 u 8 dígitos numéricos" %>
+    </div>
+
+
+  <div class="field">
+    <%= form.label :tipo_sangre %>
+    <%= form.select :tipo_sangre, options_for_select(["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], @solicitud.tipo_sangre, required: true) %>
+  </div>
+
+    <%= form.label :location_id, "Ubicación" %>
+    <%= form.collection_select :location_id, Ubicacion.all, :id, :nombre, prompt: "Seleccione una ubicación", required: true %>
+
+    </div>
+        <div class="field">
+        <%= form.label :donantes_requeridos %>
+        <%= form.number_field :donantes_requeridos, min: 1, step: 1, placeholder: "Ingrese el número de donantes requeridos", required: true %>
+    </div>
+
+    <div class="field">
+        <%= form.label :detalles %>
+        <%= form.text_area :detalles, placeholder: "Ingrese detalles adicionales de la solicitud", maxlength: 140 %>
+    </div>
+
+  <div class="actions">
+    <%= form.submit "Aceptar" %>
+  </div>
+<% end %>
+
+<%= link_to 'Volver', solicitudes_path %>

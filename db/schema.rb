@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_24_224440) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
   create_table "condiciones_cronicas", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
@@ -97,7 +97,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_24_224440) do
     t.integer "location_id"
     t.integer "donantes_requeridos"
     t.text "detalles"
-    t.string "estado"
+    t.string "estado", default: "pendiente"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

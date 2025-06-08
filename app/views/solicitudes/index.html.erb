@@ -1,0 +1,32 @@
+<%= render 'shared/navbar' %>
+
+<h1>Solicitudes de Sangre</h1>
+
+<!-- Botón para crear nueva solicitud -->
+<%= link_to 'Crear Solicitud', new_solicitud_path, class: "btn btn-primary", style: "margin-bottom: 20px;" %>
+
+<div class="solicitudes-list">
+  <h2>Solicitudes Existentes</h2>
+
+  <% if @solicitudes.any? %>
+    <% @solicitudes.each do |solicitud| %>
+      <div style="border: 1px solid #ccc; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #fff; position: relative;">
+        <strong>Paciente:</strong> <%= solicitud.nombre_paciente %><br>
+        <strong>C.I.N.:</strong> <%= solicitud.cin_paciente %><br>
+        <strong>Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %><br>
+        <strong>Ubicación:</strong> <%= solicitud.ubicacion.nombre %><br>
+        <strong>Donantes Requeridos:</strong> <%= solicitud.donantes_requeridos %><br>
+        <strong>Detalles:</strong> <%= solicitud.detalles.presence || "Sin detalles adicionales" %>
+        <% if solicitud.user == current_user %>
+          <%= button_to 'Eliminar', solicitud_path(solicitud), method: :delete, form: { class: 'btn-eliminar-form', data: { confirm: '¿Estás seguro que desea eliminar la solicitud?' } }, class: "btn btn-danger", style: "position: absolute; top: 10px; right: 10px;" %>
+          <%= link_to 'Editar', edit_solicitud_path(solicitud), class: 'btn btn-primary', style: 'position: absolute; top: 10px; right: 80px;' %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No hay solicitudes aún.</p>
+  <% end %>
+</div>
+
+
+
