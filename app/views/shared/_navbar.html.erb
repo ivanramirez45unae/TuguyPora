@@ -3,11 +3,13 @@
 </div>
 
 <nav style="display: flex; background-color: #ffd2bd; border: 2px solid black;">
-  <a href="#" style="flex: 1; background-color: red; color: white; font-weight: bold; text-align: center; padding: 10px; border-right: 2px solid black;">INICIO</a>
+  <a href="<%= root_path %>" style="flex: 1; background-color: red; color: white; font-weight: bold; text-align: center; padding: 10px; border-right: 2px solid black;">INICIO</a>
   <a href="#" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Información y requisitos</a>
 <a href="<%= solicitudes_path %>" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Solicitudes</a>
 
-  <div style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">❤️</div>
+  <div style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">
+  <%= link_to "Registrar como Donante", new_donante_path, style: "text-decoration: none; color: inherit;" %>
+</div>
   <a href="#" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Mi perfil</a>
   <div style="flex: 1; text-align: center; padding: 10px;">
   <div style="flex: 1; text-align: center; padding: 10px;">

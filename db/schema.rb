@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
   create_table "condiciones_cronicas", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
@@ -43,22 +43,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
     t.float "estatura_cm"
     t.boolean "tiene_tatuajes"
     t.date "ult_donacion_fecha"
-    t.boolean "ult_donacion_verificado"
+    t.boolean "ult_donacion_verificado", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_donantes_on_user_id"
   end
 
   create_table "donantes_condiciones", force: :cascade do |t|
-    t.integer "donor_id"
-    t.integer "condition_id"
+    t.integer "donante_id"
+    t.integer "condicion_cronica_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "donantes_medicamentos", force: :cascade do |t|
-    t.integer "donor_id"
-    t.integer "medication_id"
+    t.integer "donante_id"
+    t.integer "medicamento_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
     t.string "nombre"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "descripcion"
   end
 
   create_table "postulaciones", force: :cascade do |t|
@@ -84,7 +85,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
     t.integer "location_id"
     t.date "fecha_tentativa"
     t.time "hora_tentativa"
-    t.string "estado"
+    t.string "estado", default: "P"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -135,10 +136,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_012429) do
   add_foreign_key "donaciones", "users"
   add_foreign_key "donaciones", "users", column: "verificado_por_usuario"
   add_foreign_key "donantes", "users"
-  add_foreign_key "donantes_condiciones", "condiciones_cronicas", column: "condition_id"
-  add_foreign_key "donantes_condiciones", "donantes", column: "donor_id"
-  add_foreign_key "donantes_medicamentos", "donantes", column: "donor_id"
-  add_foreign_key "donantes_medicamentos", "medicamentos", column: "medication_id"
+  add_foreign_key "donantes_condiciones", "condiciones_cronicas", column: "condicion_cronica_id"
+  add_foreign_key "donantes_condiciones", "donantes"
+  add_foreign_key "donantes_medicamentos", "donantes"
+  add_foreign_key "donantes_medicamentos", "medicamentos"
   add_foreign_key "horarios", "dias", column: "day_id"
   add_foreign_key "horarios", "ubicaciones", column: "location_id"
   add_foreign_key "postulaciones", "solicitudes", column: "request_id"

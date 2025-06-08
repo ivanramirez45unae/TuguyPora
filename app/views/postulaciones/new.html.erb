@@ -1,0 +1,21 @@
+<h1>Nueva Postulación</h1>
+
+<%= form_with model: @postulacion, local: true do |f| %>
+  <%= hidden_field_tag 'postulacion[location_id]', params[:location_id] %>
+
+  <div>
+    <%= f.label :fecha_tentativa, "Fecha Tentativa" %><br>
+    <%= f.date_field :fecha_tentativa %>
+  </div>
+
+  <div>
+    <%= f.label :hora_tentativa, "Hora Tentativa" %><br>
+    <%= f.time_field :hora_tentativa %>
+  </div>
+
+  <%= f.hidden_field :request_id, value: @request_id %> <!-- Solo si aplica -->
+
+  <div>
+    <%= f.submit "Enviar Postulación" %>
+  </div>
+<% end %>

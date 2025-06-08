@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def index
-    # contenido visible solo para usuarios logueados
+  @ubicaciones = Ubicacion.all
   end
 end

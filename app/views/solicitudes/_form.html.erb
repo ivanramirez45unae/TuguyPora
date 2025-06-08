@@ -20,11 +20,11 @@
         <%= form.text_field :cin_paciente, placeholder: "Ingrese la cédula del paciente", required: true, pattern: "[0-9]{7,8}", title: "Debe tener 7 u 8 dígitos numéricos" %>
     </div>
 
-
   <div class="field">
     <%= form.label :tipo_sangre %>
-    <%= form.select :tipo_sangre, options_for_select(["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], @solicitud.tipo_sangre, required: true) %>
+    <%= form.select :tipo_sangre, options_for_select(["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], @solicitud.tipo_sangre), required: true %>
   </div>
+
 
     <%= form.label :location_id, "Ubicación" %>
     <%= form.collection_select :location_id, Ubicacion.all, :id, :nombre, prompt: "Seleccione una ubicación", required: true %>

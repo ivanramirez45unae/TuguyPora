@@ -21,6 +21,8 @@ class SolicitudesController < ApplicationController
     end
   end
 
+
+
   def destroy
     @solicitud = Solicitud.find(params[:id])
     if @solicitud.user == current_user

@@ -1,0 +1,57 @@
+<h1>Registro de Donante</h1>
+
+<%= form_with model: @donante, local: true do |f| %>
+  <div>
+    <%= f.label :tipo_sanguineo, "Tipo Sanguíneo" %><br>
+    <%= f.select :tipo_sanguineo, 
+      ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 
+      { prompt: "Seleccione su tipo de sangre" }, 
+      required: true %>
+  </div>
+
+  <div>
+    <%= f.label :peso_kg, "Peso (kg)" %><br>
+    <%= f.number_field :peso_kg, step: 0.1, required: true, min: 0 %>
+  </div>
+
+  <div>
+    <%= f.label :estatura_cm, "Estatura (cm)" %><br>
+    <%= f.number_field :estatura_cm, step: 0.1, required: true, min: 0 %>
+  </div>
+
+  <div>
+    <%= f.label :tiene_tatuajes, "¿Tiene tatuajes?" %><br>
+    <%= f.check_box :tiene_tatuajes %>
+  </div>
+
+  <div>
+    <%= f.label :ult_donacion_fecha, "Última Donación (si hubo)" %><br>
+    <%= f.date_field :ult_donacion_fecha %>
+  </div>
+
+  <!-- Medicamentos -->
+  <fieldset>
+    <legend>Medicamentos que está tomando (marque los que correspondan)</legend>
+    <% Medicamento.all.each do |med| %>
+      <div>
+        <%= check_box_tag "donante[medicamento_ids][]", med.id, @donante.medicamento_ids.include?(med.id), id: "medicamento_#{med.id}" %>
+        <%= label_tag "medicamento_#{med.id}", "#{med.nombre} #{med.descripcion.present? ? "(#{med.descripcion})" : ''}" %>
+      </div>
+    <% end %>
+  </fieldset>
+
+  <!-- Condiciones Crónicas -->
+  <fieldset>
+    <legend>Condiciones crónicas (marque las que correspondan)</legend>
+    <% CondicionCronica.all.each do |cond| %>
+      <div>
+        <%= check_box_tag "donante[condiciones_cronica_ids][]", cond.id, @donante.condiciones_cronica_ids.include?(cond.id), id: "condicion_#{cond.id}" %>
+        <%= label_tag "condicion_#{cond.id}", cond.nombre %>
+      </div>
+    <% end %>
+  </fieldset>
+
+  <div>
+    <%= f.submit "Registrarse como Donante" %>
+  </div>
+<% end %>
