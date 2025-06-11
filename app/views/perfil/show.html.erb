@@ -1,0 +1,68 @@
+<%= render 'shared/navbar' %>
+
+<div class="perfil-container">
+  <!-- Encabezado -->
+  <div class="perfil-top">
+    <!-- Sangre -->
+    <div class="perfil-circulo">
+      <span><%= @donante.tipo_sanguineo %></span>
+    </div>
+
+    <!-- Foto -->
+    <div class="perfil-foto">
+      <div class="foto-placeholder"></div>
+      <em><%= @user.nombre %></em>
+    </div>
+
+    <!-- Donaciones -->
+    <div class="perfil-circulo">
+      <span><%= @donaciones_count %></span>
+      <small>Donaciones</small>
+    </div>
+  </div>
+
+  <!-- Botones de sección -->
+  <div class="perfil-tabs">
+    <button class="tab-button active" data-target="ficha">Ficha médica</button>
+    <button class="tab-button" data-target="donaciones">Historial de donaciones</button>
+    <button class="tab-button" data-target="postulaciones">Postulaciones</button>
+  </div>
+
+  <!-- Contenido dinámico -->
+  <div class="perfil-content">
+    <div id="ficha" class="tab-content active">
+      <p><strong>Peso:</strong> <%= @donante.peso_kg %> kg</p>
+      <p><strong>Estatura:</strong> <%= @donante.estatura_cm %> cm</p>
+      <p><strong>Tatuajes:</strong> <%= @donante.tiene_tatuajes ? 'Sí' : 'No' %></p>
+    </div>
+    <div id="donaciones" class="tab-content">
+      <% @donaciones.each do |d| %>
+        <p><%= d.created_at.strftime("%d/%m/%Y") %></p>
+      <% end %>
+    </div>
+    <div id="postulaciones" class="tab-content">
+      <% @postulaciones.each do |p| %>
+        <p>
+          Fecha: <%= p.fecha_tentativa.strftime("%d/%m/%Y") if p.fecha_tentativa %><br>
+          Hora: <%= p.hora_tentativa.strftime("%H:%M") if p.hora_tentativa %><br>
+          Estado: <%= p.estado %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Cambiar el botón activo
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Mostrar la sección correspondiente
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      const targetId = btn.getAttribute('data-target');
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+</script>

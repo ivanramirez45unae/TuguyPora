@@ -6,4 +6,5 @@ class Donante < ApplicationRecord
   has_many :condiciones_cronicas, through: :donantes_condiciones, source: :condicion_cronica
 
   belongs_to :user
+  validates :user_id, uniqueness: true
 end
