@@ -3,10 +3,16 @@
 <div class="perfil-container">
   <!-- Encabezado -->
   <div class="perfil-top">
-    <!-- Sangre -->
-    <div class="perfil-circulo">
-      <span><%= @donante.tipo_sanguineo %></span>
-    </div>
+    <!-- Sangre (solo si es donante) -->
+    <% if @donante %>
+      <div class="perfil-circulo">
+        <span><%= @donante.tipo_sanguineo %></span>
+      </div>
+    <% else %>
+      <div class="perfil-circulo">
+        <span>❌</span>
+      </div>
+    <% end %>
 
     <!-- Foto -->
     <div class="perfil-foto">
@@ -21,6 +27,14 @@
     </div>
   </div>
 
+  <!-- Datos básicos -->
+  <div class="perfil-datos">
+    <p>📱 <strong>Teléfono:</strong> <%= @user.num_telefono %></p>
+    <p>🎂 <strong>Nacimiento:</strong> <%= @user.fec_nacimiento.strftime("%d/%m/%Y") if @user.fec_nacimiento %></p>
+    <p>📍 <strong>Dirección:</strong> <%= @user.direccion %></p>
+    <p>🧬 <strong>Género:</strong> <%= @user.genero %></p>
+  </div>
+
   <!-- Botones de sección -->
   <div class="perfil-tabs">
     <button class="tab-button active" data-target="ficha">Ficha médica</button>
@@ -31,21 +45,30 @@
   <!-- Contenido dinámico -->
   <div class="perfil-content">
     <div id="ficha" class="tab-content active">
-      <p><strong>Peso:</strong> <%= @donante.peso_kg %> kg</p>
-      <p><strong>Estatura:</strong> <%= @donante.estatura_cm %> cm</p>
-      <p><strong>Tatuajes:</strong> <%= @donante.tiene_tatuajes ? 'Sí' : 'No' %></p>
-    </div>
-    <div id="donaciones" class="tab-content">
-      <% @donaciones.each do |d| %>
-        <p><%= d.created_at.strftime("%d/%m/%Y") %></p>
+      <% if @donante %>
+        <h3>🩸 Información como Donante</h3>
+        <p>⚖️ <strong>Peso:</strong> <%= @donante.peso_kg %> kg</p>
+        <p>📏 <strong>Estatura:</strong> <%= @donante.estatura_cm %> cm</p>
+        <p>🧷 <strong>¿Tatuajes?:</strong> <%= @donante.tiene_tatuajes ? 'Sí' : 'No' %></p>
+        <p>🕒 <strong>Última donación:</strong> <%= @donante.ult_donacion_fecha.strftime("%d/%m/%Y") if @donante.ult_donacion_fecha %></p>
+        <p>✔️ <strong>Verificado:</strong> <%= @donante.ult_donacion_verificado ? 'Sí' : 'No' %></p>
+      <% else %>
+        <p>❗ No se encontró información como donante.</p>
       <% end %>
     </div>
+
+    <div id="donaciones" class="tab-content">
+      <% @donaciones.each do |d| %>
+        <p>🗓️ <%= d.created_at.strftime("%d/%m/%Y") %></p>
+      <% end %>
+    </div>
+
     <div id="postulaciones" class="tab-content">
       <% @postulaciones.each do |p| %>
         <p>
-          Fecha: <%= p.fecha_tentativa.strftime("%d/%m/%Y") if p.fecha_tentativa %><br>
-          Hora: <%= p.hora_tentativa.strftime("%H:%M") if p.hora_tentativa %><br>
-          Estado: <%= p.estado %>
+          🗓️ <strong>Fecha:</strong> <%= p.fecha_tentativa.strftime("%d/%m/%Y") if p.fecha_tentativa %><br>
+          🕒 <strong>Hora:</strong> <%= p.hora_tentativa.strftime("%H:%M") if p.hora_tentativa %><br>
+          📌 <strong>Estado:</strong> <%= p.estado %>
         </p>
       <% end %>
     </div>

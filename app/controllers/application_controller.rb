@@ -1,7 +1,30 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def after_sign_in_path_for(resource)
-    root_path  # O 'home_path' si corresponde a la ruta correcta
+    root_path  # O el path que corresponda tras iniciar sesión
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [
+      :nombre,
+      :nombredeusuario,
+      :num_telefono,
+      :fec_nacimiento,
+      :direccion,
+      :genero
+      # :rol  ← NO incluyas esto si el rol lo asignás por defecto
+    ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [
+      :nombre,
+      :nombredeusuario,
+      :num_telefono,
+      :fec_nacimiento,
+      :direccion,
+      :genero
+    ])
   end
 end

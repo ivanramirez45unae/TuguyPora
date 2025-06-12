@@ -2,7 +2,6 @@
 
 <h1>Solicitudes de Sangre</h1>
 
-<!-- Botón para crear nueva solicitud -->
 <%= link_to 'Crear Solicitud', new_solicitud_path, class: "btn btn-primary", style: "margin-bottom: 20px;" %>
 
 <div class="solicitudes-list">
@@ -10,16 +9,50 @@
 
   <% if @solicitudes.any? %>
     <% @solicitudes.each do |solicitud| %>
+      <% postulaciones_count = solicitud.postulaciones.count rescue 0 %>
+      <% donaciones_confirmadas = solicitud.donaciones.count rescue 0 %>
+
       <div style="border: 1px solid #ccc; border-radius: 10px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: #fff; position: relative;">
-        <strong>Paciente:</strong> <%= solicitud.nombre_paciente %><br>
-        <strong>C.I.N.:</strong> <%= solicitud.cin_paciente %><br>
-        <strong>Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %><br>
-        <strong>Ubicación:</strong> <%= solicitud.ubicacion.nombre %><br>
-        <strong>Donantes Requeridos:</strong> <%= solicitud.donantes_requeridos %><br>
-        <strong>Detalles:</strong> <%= solicitud.detalles.presence || "Sin detalles adicionales" %>
+        
+        <!-- Nombre del usuario que publicó la solicitud -->
+        <p style="font-size: 14px; color: #666; margin-bottom: 10px;">
+          🩸 Publicado por: <strong><%= solicitud.user.nombre %></strong>
+        </p>
+
+        <p><strong>Paciente:</strong> <%= solicitud.nombre_paciente %></p>
+        <p><strong>C.I.N.:</strong> <%= solicitud.cin_paciente %></p>
+        <p><strong>Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %></p>
+        <p><strong>Ubicación:</strong> <%= solicitud.ubicacion.nombre %></p>
+        <p><strong>Donantes Requeridos:</strong> <%= solicitud.donantes_requeridos %></p>
+        <p><strong>Detalles:</strong> <%= solicitud.detalles.presence || "Sin detalles adicionales" %></p>
+
+        <!-- Estado de postulaciones/donaciones -->
+        <p>
+          🔄 <strong>Estado:</strong>
+          <% if donaciones_confirmadas > 0 || postulaciones_count > 0 %>
+            <% if donaciones_confirmadas > 0 %>
+              <%= "#{donaciones_confirmadas} #{'donación'.pluralize(donaciones_confirmadas)}" %>
+            <% end %>
+            <% if donaciones_confirmadas > 0 && postulaciones_count > 0 %> y <% end %>
+            <% if postulaciones_count > 0 %>
+              <%= "#{postulaciones_count} #{'postulación'.pluralize(postulaciones_count)}" %>
+            <% end %>
+          <% else %>
+            0 postulaciones
+          <% end %>
+        </p>
+
+        <!-- Acciones según el usuario -->
         <% if solicitud.user == current_user %>
-          <%= button_to 'Eliminar', solicitud_path(solicitud), method: :delete, form: { class: 'btn-eliminar-form', data: { confirm: '¿Estás seguro que desea eliminar la solicitud?' } }, class: "btn btn-danger", style: "position: absolute; top: 10px; right: 10px;" %>
           <%= link_to 'Editar', edit_solicitud_path(solicitud), class: 'btn btn-primary', style: 'position: absolute; top: 10px; right: 80px;' %>
+          <%= button_to 'Eliminar', solicitud_path(solicitud), method: :delete, form: { data: { confirm: '¿Estás seguro que desea eliminar la solicitud?' } }, class: 'btn btn-danger', style: 'position: absolute; top: 10px; right: 10px;' %>
+        <% else %>
+          <% if current_user&.donante %>
+            <%= link_to 'Donar', new_postulacion_path(solicitud_id: solicitud.id), class: 'btn btn-success', style: 'margin-top: 10px;' %>
+          <% else %>
+            <%= link_to 'Regístrate como donante para donar', new_donante_path, class: 'btn btn-warning', style: 'margin-top: 10px;' %>
+            <p class="text-danger mt-2">⚠️ Debes registrarte como donante antes de postularte para una donación.</p>
+          <% end %>
         <% end %>
       </div>
     <% end %>
@@ -27,6 +60,3 @@
     <p>No hay solicitudes aún.</p>
   <% end %>
 </div>
-
-
-

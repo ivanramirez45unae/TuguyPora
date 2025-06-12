@@ -7,7 +7,12 @@
     <div style="border: 1px solid #ccc; border-radius: 10px; padding: 15px; width: 250px; background-color: #f9f9f9;">
       <h3><%= u.nombre %></h3>
       <button onclick="document.getElementById('info-<%= u.id %>').style.display = (document.getElementById('info-<%= u.id %>').style.display == 'none' ? 'block' : 'none')" style="margin-top: 10px;">Ver más</button>
-      <%= link_to "Donar", new_postulacion_path(location_id: u.id), style: "margin-top: 10px; display: inline-block; padding: 8px 15px; text-decoration: none; border: 1px solid #ccc;" %>
+      <% if current_user.donante %>
+        <%= link_to 'Donar ahora', new_postulacion_path(location_id: u.id), class: 'btn btn-success', style: 'margin-top: 10px;' %>
+      <% else %>
+        <%= link_to 'Registrate como donante', new_donante_path, class: 'btn btn-warning', style: 'margin-top: 10px;' %>
+        <p class="text-danger mt-2">⚠️ Debes registrarte como donante antes de poder donar.</p>
+      <% end %>
       <div id="info-<%= u.id %>" style="display: none; margin-top: 10px;">
         <p><strong>Dirección:</strong> <%= u.direccion %></p>
         <p><strong>Teléfono:</strong> <%= u.num_telefono %></p>

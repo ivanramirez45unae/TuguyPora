@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
   create_table "condiciones_cronicas", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
@@ -25,9 +25,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
 
   create_table "donaciones", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "donor_id"
-    t.integer "request_id"
-    t.integer "location_id"
+    t.integer "donante_id"
+    t.integer "solicitud_id"
+    t.integer "ubicacion_id"
     t.date "fecha_donacion"
     t.integer "volumen_ml"
     t.string "tipo_sangre"
@@ -81,8 +81,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
 
   create_table "postulaciones", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "request_id"
-    t.integer "location_id"
+    t.integer "solicitud_id"
+    t.integer "ubicacion_id"
     t.date "fecha_tentativa"
     t.time "hora_tentativa"
     t.string "estado", default: "P"
@@ -130,9 +130,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "donaciones", "donantes", column: "donor_id"
-  add_foreign_key "donaciones", "solicitudes", column: "request_id"
-  add_foreign_key "donaciones", "ubicaciones", column: "location_id"
+  add_foreign_key "donaciones", "donantes"
+  add_foreign_key "donaciones", "solicitudes"
+  add_foreign_key "donaciones", "ubicaciones", column: "ubicacion_id"
   add_foreign_key "donaciones", "users"
   add_foreign_key "donaciones", "users", column: "verificado_por_usuario"
   add_foreign_key "donantes", "users"
@@ -142,8 +142,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_01_160503) do
   add_foreign_key "donantes_medicamentos", "medicamentos"
   add_foreign_key "horarios", "dias", column: "day_id"
   add_foreign_key "horarios", "ubicaciones", column: "location_id"
-  add_foreign_key "postulaciones", "solicitudes", column: "request_id"
-  add_foreign_key "postulaciones", "ubicaciones", column: "location_id"
+  add_foreign_key "postulaciones", "solicitudes"
+  add_foreign_key "postulaciones", "ubicaciones", column: "ubicacion_id"
   add_foreign_key "postulaciones", "users"
   add_foreign_key "solicitudes", "ubicaciones", column: "location_id"
   add_foreign_key "solicitudes", "users"

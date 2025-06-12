@@ -1,7 +1,22 @@
 <h1>Nueva Postulación</h1>
 
 <%= form_with model: @postulacion, local: true do |f| %>
-  <%= hidden_field_tag 'postulacion[location_id]', params[:location_id] %>
+  <!-- Si vino desde una ubicación, se guarda el location_id -->
+  <% if params[:location_id].present? %>
+    <%= f.hidden_field :location_id, value: params[:location_id] %>
+    <p><strong>Ubicación seleccionada:</strong> <%= Ubicacion.find(params[:location_id]).nombre %></p>
+  <% else %>
+    <div>
+      <%= f.label :location_id, "Seleccionar punto de donación" %><br>
+      <%= f.collection_select :ubicacion_id, Ubicacion.all, :id, :nombre, prompt: "Selecciona una ubicación"%>
+    </div>
+  <% end %>
+
+  <!-- Si vino desde una solicitud, se guarda el request_id -->
+  <% if @solicitud.present? %>
+    <%= f.hidden_field :solicitud_id, value: @solicitud.id %>
+    <p><strong>Postulando para paciente:</strong> <%= @solicitud.nombre_paciente %></p>
+  <% end %>
 
   <div>
     <%= f.label :fecha_tentativa, "Fecha Tentativa" %><br>
@@ -13,9 +28,7 @@
     <%= f.time_field :hora_tentativa %>
   </div>
 
-  <%= f.hidden_field :request_id, value: @request_id %> <!-- Solo si aplica -->
-
-  <div>
-    <%= f.submit "Enviar Postulación" %>
+  <div style="margin-top: 20px;">
+    <%= f.submit "Enviar Postulación", class: "btn btn-primary" %>
   </div>
 <% end %>

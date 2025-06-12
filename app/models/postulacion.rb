@@ -2,7 +2,7 @@ class Postulacion < ApplicationRecord
   # relaciones
   belongs_to :user
   belongs_to :solicitud, optional: true
-  belongs_to :ubicacion, class_name: "Ubicacion", foreign_key: "location_id"
+  belongs_to :ubicacion
 
 
   before_validation :set_default_estado, on: :create
