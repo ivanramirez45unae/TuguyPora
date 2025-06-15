@@ -1,22 +1,77 @@
-<div style="background-color: #c00000; padding: 10px; text-align: center; color: white; font-weight: bold;">
-  Donación de sangre Itapúa
+<div style="
+  background: linear-gradient(90deg, #c00000 0%, #a00000 100%);
+  padding: 16px 24px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.6rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+">
+  🩸 Tuguy Porã - Itapúa 🩸
 </div>
 
-<nav style="display: flex; background-color: #ffd2bd; border: 2px solid black;">
-  <a href="<%= root_path %>" style="flex: 1; background-color: red; color: white; font-weight: bold; text-align: center; padding: 10px; border-right: 2px solid black;">INICIO</a>
-  <a href="#" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Información y requisitos</a>
-<a href="<%= solicitudes_path %>" style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">Solicitudes</a>
 
-  <div style="flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;">
-  <%= link_to "Registrar como Donante", new_donante_path, style: "text-decoration: none; color: inherit;" %>
-</div>
-  <%= link_to "Mi perfil", mi_perfil_path, style: "flex: 1; text-align: center; padding: 10px; border-right: 2px solid black;" %>
-  <div style="flex: 1; text-align: center; padding: 10px;">
-  <div style="flex: 1; text-align: center; padding: 10px;">
-  <%= button_to destroy_user_session_path, method: :delete, style: "background-color: #c00000; color: white; font-weight: bold; padding: 10px; border: none; cursor: pointer;", data: { turbo: false, confirm: '¿Está seguro de que quiere cerrar sesión?' } do %>
-    Cerrar sesión
+<nav style="display: flex; justify-content: space-between; align-items: center; background: #ffd2bd; padding: 0 24px; border-bottom: 2px solid #000; font-family: Arial,sans-serif;">
+  <% if current_user.centro? %>
+    <div style="display: flex; flex-grow: 1; gap: 24px; align-items: center">
+      <%= [
+        ["Postulaciones", current_user ? centros_dashboard_path : root_path],
+        ["Donaciones", "#"],
+        ["Solicitudes", solicitudes_path],
+        ["Donantes", donantes_path],
+        ["Mi perfil", mi_perfil_path]
+      ].map do |label, path|
+        is_active = current_page?(path)
+        border_color = is_active ? "#c00000" : "transparent"
+        text_color   = is_active ? "#c00000" : "#000"
+
+        link_to label, path,
+          style: "padding: 12px 20px; font-weight: 500; text-decoration: none; color: #{text_color}; border-bottom: 3px solid #{border_color}; transition: all 0.2s ease-in-out;",
+          onmouseover: "this.style.borderBottom='3px solid #c00000'; this.style.color='#c00000'",
+          onmouseout:  "this.style.borderBottom='3px solid #{border_color}'; this.style.color='#{text_color}'"
+      end.join.html_safe %>
+    </div>
+  <% else %>
+    <div style="display: flex; flex-grow: 1; gap: 24px; align-items: center">
+      <%= [
+        # Usa el dashboard real como “inicio” del usuario logueado;
+        # para invitados seguiría siendo root_path.
+        ["INICIO", current_user ? users_dashboard_path : root_path],
+        ["Información y requisitos", "#"],
+        ["Solicitudes", solicitudes_path],
+        ["Mi perfil", mi_perfil_path]
+      ].map do |label, path|
+        is_active   = current_page?(path)
+        normal_col  = "#000"
+        active_col  = "#c00000"
+        link_style  = "
+          padding: 12px 20px;
+          font-weight: 500;
+          text-decoration: none;
+          color: #{is_active ? active_col : normal_col};
+          border-bottom: 3px solid #{is_active ? active_col : 'transparent'};
+          transition: all 0.2s ease-in-out;
+        "
+
+        link_to label, path,
+                style: link_style,
+                onmouseover: "this.style.color='#{active_col}'",
+                onmouseout:  "if(!#{is_active}) this.style.color='#{normal_col}'"
+      end.join.html_safe %>
+    </div>
   <% end %>
-</div>
 
-
+  <div>
+    <%= button_to destroy_user_session_path, method: :delete,
+        style: "background: #c00000; color: #ffffff; font-weight: bold; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; transition: all 0.2s ease-in-out;",
+        onmouseover: "this.style.background='#a00000'" ,
+        onmouseout: "this.style.background='#c00000'" ,
+        data: { turbo: false, confirm: '¿Está seguro de que quiere cerrar sesión?' } do %>
+      Cerrar sesión
+    <% end %>
+  </div>
 </nav>

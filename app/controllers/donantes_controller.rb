@@ -1,6 +1,10 @@
 class DonantesController < ApplicationController
+  def index
+    @donantes = Donante.all
+  end
   def new
-    @donante = Donante.new
+    @donacion = Donacion.new
+    @donante = Donante.find(params[:donante_id]) if params[:donante_id]
   end
 
   # def create

@@ -1,0 +1,2 @@
+module Centros::DashboardHelper
+end

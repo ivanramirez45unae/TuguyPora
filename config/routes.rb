@@ -3,8 +3,21 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :solicitudes, only: [ :index, :new, :create, :edit, :update, :destroy ]
-  resources :postulaciones, only: [ :new, :create ]
-  resources :donantes, only: [ :new, :create ]
+  resources :donantes, only: [ :index, :new, :create, :edit, :update ]
+  resources :donaciones, only: [ :show ]
+  resources :postulaciones, only: [ :new, :create ] do
+    resources :donaciones, only: [ :new, :create ]
+  end
 
-  root "home#index"
+resources :donaciones, only: [ :show ]
+
+  root "home#redirect_user"
+
+  namespace :users do
+    get "dashboard", to: "dashboard#index"
+  end
+
+  namespace :centros do
+    get "dashboard", to: "dashboard#index"
+  end
 end

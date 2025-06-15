@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_15_042305) do
   create_table "condiciones_cronicas", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
@@ -34,6 +34,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
     t.integer "verificado_por_usuario"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "postulacion_id", null: false
+    t.index ["postulacion_id"], name: "index_donaciones_on_postulacion_id"
   end
 
   create_table "donantes", force: :cascade do |t|
@@ -109,6 +111,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
     t.string "num_telefono"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_ubicaciones_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -131,6 +135,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
   end
 
   add_foreign_key "donaciones", "donantes"
+  add_foreign_key "donaciones", "postulaciones"
   add_foreign_key "donaciones", "solicitudes"
   add_foreign_key "donaciones", "ubicaciones", column: "ubicacion_id"
   add_foreign_key "donaciones", "users"
@@ -147,4 +152,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_000946) do
   add_foreign_key "postulaciones", "users"
   add_foreign_key "solicitudes", "ubicaciones", column: "location_id"
   add_foreign_key "solicitudes", "users"
+  add_foreign_key "ubicaciones", "users"
 end

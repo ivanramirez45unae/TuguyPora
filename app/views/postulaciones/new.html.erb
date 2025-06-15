@@ -1,18 +1,18 @@
 <h1>Nueva Postulación</h1>
 
 <%= form_with model: @postulacion, local: true do |f| %>
-  <!-- Si vino desde una ubicación, se guarda el location_id -->
-  <% if params[:location_id].present? %>
-    <%= f.hidden_field :location_id, value: params[:location_id] %>
-    <p><strong>Ubicación seleccionada:</strong> <%= Ubicacion.find(params[:location_id]).nombre %></p>
+  <!-- Si vino desde una ubicación, se guarda el ubicacion_id -->
+  <% if params[:ubicacion_id].present? %>
+    <%= f.hidden_field :ubicacion_id, value: params[:ubicacion_id] %>
+    <p><strong>Ubicación seleccionada:</strong> <%= Ubicacion.find(params[:ubicacion_id]).nombre %></p>
   <% else %>
     <div>
-      <%= f.label :location_id, "Seleccionar punto de donación" %><br>
-      <%= f.collection_select :ubicacion_id, Ubicacion.all, :id, :nombre, prompt: "Selecciona una ubicación"%>
+      <%= f.label :ubicacion_id, "Seleccionar punto de donación" %><br>
+      <%= f.collection_select :ubicacion_id, Ubicacion.all, :id, :nombre, prompt: "Selecciona una ubicación" %>
     </div>
   <% end %>
 
-  <!-- Si vino desde una solicitud, se guarda el request_id -->
+  <!-- Si vino desde una solicitud, se guarda el solicitud_id -->
   <% if @solicitud.present? %>
     <%= f.hidden_field :solicitud_id, value: @solicitud.id %>
     <p><strong>Postulando para paciente:</strong> <%= @solicitud.nombre_paciente %></p>

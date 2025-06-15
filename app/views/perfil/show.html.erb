@@ -1,34 +1,40 @@
 <%= render 'shared/navbar' %>
 
-<div class="perfil-container">
-  <!-- Encabezado -->
-  <div class="perfil-top">
-    <!-- Sangre (solo si es donante) -->
-    <% if @donante %>
-      <div class="perfil-circulo">
-        <span><%= @donante.tipo_sanguineo %></span>
-      </div>
-    <% else %>
-      <div class="perfil-circulo">
-        <span>❌</span>
+<div class="perfil-container" style="max-width: 900px; margin: 30px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+
+  <!-- Encabezado perfil -->
+  <div class="perfil-top" style="display: flex; align-items: center; justify-content: space-between; background: #fafafa; padding: 20px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
+
+      <!-- Tipo de Sangre -->
+  <div style="min-width: 120px; text-align: center; padding: 10px; background: #8B1E3F; color: white; border-radius: 8px; font-weight: 700;">
+    <div style="font-size: 36px; line-height: 1;"> <%= @donante ? @donante.tipo_sanguineo : "❌" %> </div>
+    <div style="font-size: 14px; margin-top: 6px; font-weight: 500;">Tipo sanguíneo</div>
+  </div>
+
+  <!-- Foto y Nombre -->
+  <div style="flex-grow: 1; text-align: center;">
+    <div class="foto-placeholder" style="width: 130px; height: 130px; border-radius: 50%; background: #ddd; margin: 0 auto 15px; box-shadow: inset 0 0 8px #bbb;"></div>
+    <em style="display: block; font-size: 28px; font-weight: 600; color: #333;"><%= @user.nombre %></em>
+
+    <% unless @donante %>
+      <div style="margin-top: 15px;">
+        <%= link_to 'Regístrate como donante', new_donante_path, 
+            style: 'background-color: #c00000; color: white; padding: 12px 30px; border-radius: 6px; font-weight: 600; text-decoration: none; transition: background-color 0.3s ease;', 
+            onmouseover: "this.style.backgroundColor='#8B1E3F'", 
+            onmouseout: "this.style.backgroundColor='#c00000'" %>
       </div>
     <% end %>
+  </div>
 
-    <!-- Foto -->
-    <div class="perfil-foto">
-      <div class="foto-placeholder"></div>
-      <em><%= @user.nombre %></em>
-    </div>
-
-    <!-- Donaciones -->
-    <div class="perfil-circulo">
-      <span><%= @donaciones_count %></span>
-      <small>Donaciones</small>
-    </div>
+  <!-- Donaciones -->
+  <div style="min-width: 120px; text-align: center; padding: 10px; background: #6A4E42; color: white; border-radius: 8px; font-weight: 700;">
+    <div style="font-size: 32px; line-height: 1;"> <%= @donante ? @donaciones_count : "❌" %> </div>
+    <div style="font-size: 14px; margin-top: 6px; font-weight: 500;">Donaciones</div>
+  </div>
   </div>
 
   <!-- Datos básicos -->
-  <div class="perfil-datos">
+  <div class="perfil-datos" style="background: #fff; padding: 25px 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 30px; line-height: 1.6; font-size: 16px;">
     <p>📱 <strong>Teléfono:</strong> <%= @user.num_telefono %></p>
     <p>🎂 <strong>Nacimiento:</strong> <%= @user.fec_nacimiento.strftime("%d/%m/%Y") if @user.fec_nacimiento %></p>
     <p>📍 <strong>Dirección:</strong> <%= @user.direccion %></p>
@@ -36,56 +42,84 @@
   </div>
 
   <!-- Botones de sección -->
-  <div class="perfil-tabs">
-    <button class="tab-button active" data-target="ficha">Ficha médica</button>
-    <button class="tab-button" data-target="donaciones">Historial de donaciones</button>
-    <button class="tab-button" data-target="postulaciones">Postulaciones</button>
+  <div class="perfil-tabs" style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
+    <button class="tab-button active" data-target="ficha" 
+      style="flex: 1; max-width: 220px; padding: 12px 0; background: #8B1E3F; color: white; font-weight: 700; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
+      Ficha médica
+    </button>
+    <button class="tab-button" data-target="donaciones" 
+      style="flex: 1; max-width: 220px; padding: 12px 0; background: #eee; color: #444; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
+      Historial de donaciones
+    </button>
+    <button class="tab-button" data-target="postulaciones" 
+      style="flex: 1; max-width: 220px; padding: 12px 0; background: #eee; color: #444; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
+      Postulaciones
+    </button>
   </div>
 
   <!-- Contenido dinámico -->
-  <div class="perfil-content">
-    <div id="ficha" class="tab-content active">
+  <div class="perfil-content" style="background: white; padding: 25px 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); min-height: 180px;">
+    <div id="ficha" class="tab-content active" style="animation: fadeIn 0.3s ease;">
       <% if @donante %>
-        <h3>🩸 Información como Donante</h3>
+        <h3 style="color: #8B1E3F; margin-bottom: 20px;">🩸 Información como Donante</h3>
         <p>⚖️ <strong>Peso:</strong> <%= @donante.peso_kg %> kg</p>
         <p>📏 <strong>Estatura:</strong> <%= @donante.estatura_cm %> cm</p>
         <p>🧷 <strong>¿Tatuajes?:</strong> <%= @donante.tiene_tatuajes ? 'Sí' : 'No' %></p>
         <p>🕒 <strong>Última donación:</strong> <%= @donante.ult_donacion_fecha.strftime("%d/%m/%Y") if @donante.ult_donacion_fecha %></p>
         <p>✔️ <strong>Verificado:</strong> <%= @donante.ult_donacion_verificado ? 'Sí' : 'No' %></p>
       <% else %>
-        <p>❗ No se encontró información como donante.</p>
+        <p style="color: #c00000; font-weight: 600;">❗ No se encontró información como donante.</p>
       <% end %>
     </div>
 
-    <div id="donaciones" class="tab-content">
-      <% @donaciones.each do |d| %>
-        <p>🗓️ <%= d.created_at.strftime("%d/%m/%Y") %></p>
+    <div id="donaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
+      <% if @donaciones.any? %>
+        <% @donaciones.each do |d| %>
+          <p>🗓️ <%= d.created_at.strftime("%d/%m/%Y") %></p>
+        <% end %>
+      <% else %>
+        <p style="color: #777;">No hay donaciones registradas.</p>
       <% end %>
     </div>
 
-    <div id="postulaciones" class="tab-content">
-      <% @postulaciones.each do |p| %>
-        <p>
-          🗓️ <strong>Fecha:</strong> <%= p.fecha_tentativa.strftime("%d/%m/%Y") if p.fecha_tentativa %><br>
-          🕒 <strong>Hora:</strong> <%= p.hora_tentativa.strftime("%H:%M") if p.hora_tentativa %><br>
-          📌 <strong>Estado:</strong> <%= p.estado %>
-        </p>
+    <div id="postulaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
+      <% if @postulaciones.any? %>
+        <% @postulaciones.each do |p| %>
+          <p style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            🗓️ <strong>Fecha:</strong> <%= p.fecha_tentativa.strftime("%d/%m/%Y") if p.fecha_tentativa %><br>
+            🕒 <strong>Hora:</strong> <%= p.hora_tentativa.strftime("%H:%M") if p.hora_tentativa %><br>
+            📌 <strong>Estado:</strong> <%= p.estado %>
+          </p>
+        <% end %>
+      <% else %>
+        <p style="color: #777;">No hay postulaciones registradas.</p>
       <% end %>
     </div>
   </div>
 </div>
 
 <script>
+  // Cambio de pestañas
   document.querySelectorAll('.tab-button').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Cambiar el botón activo
-      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => {
+        b.classList.remove('active');
+        b.style.backgroundColor = '#eee';
+        b.style.color = '#444';
+      });
       btn.classList.add('active');
+      btn.style.backgroundColor = '#8B1E3F';
+      btn.style.color = 'white';
 
-      // Mostrar la sección correspondiente
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      const targetId = btn.getAttribute('data-target');
-      document.getElementById(targetId).classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+      document.getElementById(btn.getAttribute('data-target')).style.display = 'block';
     });
   });
 </script>
+
+<style>
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+</style>

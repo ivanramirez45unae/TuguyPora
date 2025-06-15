@@ -1,0 +1,32 @@
+<%= render 'shared/navbar' %>
+
+<h1 style="text-align: center; color: #c00000; margin-bottom: 30px;">📍 Puntos de Donación - Itapúa</h1>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+  <% @ubicaciones.each do |u| %>
+    <div style="background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 20px; position: relative; transition: transform 0.2s;">
+      <h3 style="color: #37474F; margin-bottom: 10px;"><%= u.nombre %></h3>
+
+      <div id="info-<%= u.id %>" style="font-size: 14px; line-height: 1.5; color: #555; margin-bottom: 15px;">
+        <p><strong>📍 Dirección:</strong> <%= u.direccion %></p>
+        <p><strong>📞 Teléfono:</strong> <%= u.num_telefono %></p>
+        <p><strong>🕐 Horario:</strong> </p>
+      </div>
+
+      <% if current_user.donante %>
+        <%= link_to '❤️ Donar ahora', new_postulacion_path(ubicacion_id: u.id),
+          style: "display: inline-block; width: 100%; padding: 12px 0;
+                  background: #b71c1c; color: #ffffff;
+                  text-align: center; border: none; border-radius: 8px;
+                  font-weight: 500; font-size: 15px;
+                  text-decoration: none; transition: background 0.3s ease, transform 0.3s ease;",
+          onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
+          onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
+      <% else %>
+        <%= link_to 'Registrate como donante', new_donante_path,
+            class: 'btn btn-warning', style: 'width: 100%; margin-top: 10px;' %>
+        <p style="color: #c62828; font-size: 13px; margin-top: 8px;">⚠️ Debes registrarte como donante antes de poder donar.</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
