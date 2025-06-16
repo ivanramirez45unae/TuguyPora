@@ -1,0 +1,33 @@
+<%= render 'shared/navbar' %>
+
+<h1 style="text-align: center; color: #c00000; margin-bottom: 24px;"> Listado de Donaciones</h1>
+
+<table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+  <thead style="background-color: #ffd2bd;">
+    <tr style="text-align: left;">
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">ID</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Fecha</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Donante</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Tipo de Sangre</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Volumen (ml)</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Solicitud</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Ubicación</th>
+      <th style="padding: 12px; border-bottom: 2px solid #ccc;">Verificado Por</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @donaciones.each do |donacion| %>
+      <tr>
+        <td style="padding: 10px;"><%= donacion.id %></td>
+        <td style="padding: 10px;"><%= l(donacion.fecha_donacion, format: :short) %></td>
+        <td style="padding: 10px;"><%= donacion.donante&.user&.nombre || "Sin nombre" %></td>
+        <td style="padding: 10px;"><%= donacion.tipo_sangre %></td>
+        <td style="padding: 10px;"><%= number_with_delimiter(donacion.volumen_ml) %></td>
+        <td style="padding: 10px;"><%= donacion.solicitud&.titulo || "<em>Sin solicitud</em>".html_safe %></td>
+        <td style="padding: 10px;"><%= donacion.ubicacion&.nombre || "<em>Sin asignar</em>".html_safe %></td>
+        <td style="padding: 10px;"><%= User.find_by(id: donacion.verificado_por_usuario)&.nombre || "<em>Sin verificar</em>".html_safe %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

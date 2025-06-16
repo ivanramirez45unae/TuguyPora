@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :solicitudes, only: [ :index, :new, :create, :edit, :update, :destroy ]
   resources :donantes, only: [ :index, :new, :create, :edit, :update ]
-  resources :donaciones, only: [ :show ]
+  resources :donaciones, only: [ :index, :show ]
   resources :postulaciones, only: [ :new, :create ] do
     resources :donaciones, only: [ :new, :create ]
   end

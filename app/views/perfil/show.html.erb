@@ -26,12 +26,37 @@
     <% end %>
   </div>
 
-  <!-- Donaciones -->
-  <div style="min-width: 120px; text-align: center; padding: 10px; background: #6A4E42; color: white; border-radius: 8px; font-weight: 700;">
-    <div style="font-size: 32px; line-height: 1;"> <%= @donante ? @donaciones_count : "❌" %> </div>
-    <div style="font-size: 14px; margin-top: 6px; font-weight: 500;">Donaciones</div>
+  <!-- Donations Card -->
+  <div style="min-width: 160px; text-align: center; padding: 20px; background: #6A4E42; color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px #0003;">
+    
+    <div style="font-size: 36px; font-weight: 800; margin-bottom: 8px;">
+      <%= @donante ? @donaciones_count : "❌" %>
+    </div>
+
+    <% if @donante %>
+      <div style="font-size: 16px; font-weight: 500; color: #FFD9B3; margin-bottom: 12px">
+        <%= @donaciones_count == 1 ? "Donación realizada" : "Donaciones realizadas" %>
+      </div>
+    <% end %>
+
+    <% if @donante&.ult_donacion_fecha.present? %>
+      <% meses_espera = @donante.user.genero == "Femenino" ? 4 : 3 %>
+      <% fecha_prox = @donante.ult_donacion_fecha.advance(months: meses_espera) %>
+      <% meses_falt = fecha_prox.month - Date.today.month + (12 * (fecha_prox.year - Date.today.year)) %>
+
+      <div style="font-size: 14px; color: #FFD9B3; font-weight: 500; margin-top: 10px">
+        Podés volver a donar a partir de <strong><%= l(fecha_prox, format: :long) %></strong>.
+        (Dentro de <%= meses_falt %> <%= meses_falt == 1 ? "mes" : "meses" %>)
+      </div>
+    <% else %>
+      <div style="font-size: 14px; color: #FFD9B3; font-weight: 500; margin-top: 10px">
+        Aún no has realizado ninguna donación.
+      </div>
+    <% end %>
+
   </div>
   </div>
+
 
   <!-- Datos básicos -->
   <div class="perfil-datos" style="background: #fff; padding: 25px 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 30px; line-height: 1.6; font-size: 16px;">

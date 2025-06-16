@@ -34,7 +34,10 @@
     <legend>Medicamentos que está tomando (marque los que correspondan)</legend>
     <% Medicamento.all.each do |med| %>
       <div>
-        <%= check_box_tag "donante[medicamento_ids][]", med.id, @donante.medicamento_ids.include?(med.id), id: "medicamento_#{med.id}" %>
+        <%= check_box_tag "donante[medicamento_ids][]",
+                  med.id,
+                  @donante&.medicamento_ids&.include?(med.id),
+                  id: "medicamento_#{med.id}" %>
         <%= label_tag "medicamento_#{med.id}", "#{med.nombre} #{med.descripcion.present? ? "(#{med.descripcion})" : ''}" %>
       </div>
     <% end %>
@@ -45,7 +48,7 @@
     <legend>Condiciones crónicas (marque las que correspondan)</legend>
     <% CondicionCronica.all.each do |cond| %>
       <div>
-        <%= check_box_tag "donante[condiciones_cronica_ids][]", cond.id, @donante.condiciones_cronica_ids.include?(cond.id), id: "condicion_#{cond.id}" %>
+        <%= check_box_tag "donante[condiciones_cronica_ids][]", cond.id, @donante&.condiciones_cronica_ids&.include?(cond.id), id: "condicion_#{cond.id}" %>
         <%= label_tag "condicion_#{cond.id}", cond.nombre %>
       </div>
     <% end %>

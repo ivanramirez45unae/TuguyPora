@@ -1,0 +1,7 @@
+<h1>Detalle de la Donación</h1>
+
+<p><strong>Fecha:</strong> <%= @donacion.fecha_donacion %></p>
+<p><strong>Volumen:</strong> <%= @donacion.volumen_ml %> ml</p>
+<p><strong>Tipo de sangre:</strong> <%= @donacion.tipo_sangre %></p>
+<p><strong>Verificado por:</strong> <%= User.find(@donacion.verificado_por_usuario).nombre %></p>
+<p><strong>Postulación:</strong> <%= @donacion.postulacion_id %></p>
