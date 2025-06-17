@@ -2,7 +2,14 @@ class SolicitudesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @solicitudes = Solicitud.all
+    @solicitudes = Solicitud
+    .left_outer_joins(:postulaciones, :donaciones)
+    .select(
+      "solicitudes.*",
+      "COUNT(DISTINCT CASE WHEN postulaciones.estado = 'P' THEN postulaciones.id END) AS postulaciones_pendientes_count",
+      "COUNT(DISTINCT donaciones.id) AS donaciones_count"
+    )
+    .group("solicitudes.id")
   end
 
   def new

@@ -4,7 +4,7 @@ class DonantesController < ApplicationController
   end
   def new
     @donacion = Donacion.new
-    @donante = Donante.find(params[:donante_id]) if params[:donante_id]
+    @donante = params[:donante_id] ? Donante.find(params[:donante_id]) : Donante.new
   end
 
   # def create

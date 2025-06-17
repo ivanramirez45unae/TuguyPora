@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_15_042305) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_17_021621) do
   create_table "condiciones_cronicas", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
@@ -66,8 +66,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_15_042305) do
   end
 
   create_table "horarios", force: :cascade do |t|
-    t.integer "location_id"
-    t.integer "day_id"
+    t.integer "ubicacion_id"
+    t.integer "dia_id"
     t.time "abre_a"
     t.time "cierra_a"
     t.datetime "created_at", null: false
@@ -145,8 +145,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_15_042305) do
   add_foreign_key "donantes_condiciones", "donantes"
   add_foreign_key "donantes_medicamentos", "donantes"
   add_foreign_key "donantes_medicamentos", "medicamentos"
-  add_foreign_key "horarios", "dias", column: "day_id"
-  add_foreign_key "horarios", "ubicaciones", column: "location_id"
+  add_foreign_key "horarios", "dias"
+  add_foreign_key "horarios", "ubicaciones", column: "ubicacion_id"
   add_foreign_key "postulaciones", "solicitudes"
   add_foreign_key "postulaciones", "ubicaciones", column: "ubicacion_id"
   add_foreign_key "postulaciones", "users"

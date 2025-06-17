@@ -7,4 +7,19 @@ class Donante < ApplicationRecord
 
   belongs_to :user
   validates :user_id, uniqueness: true
+
+  def puede_donar?
+  return true unless ult_donacion_fecha.present?
+
+  meses_espera = user.genero == "Femenino" ? 4 : 3
+  fecha_habilitada = ult_donacion_fecha.advance(months: meses_espera)
+  Date.today >= fecha_habilitada
+  end
+
+  def fecha_habilitada_para_donar
+    return Date.today unless ult_donacion_fecha.present?
+
+    meses_espera = user.genero == "Femenino" ? 4 : 3
+    ult_donacion_fecha.advance(months: meses_espera)
+  end
 end

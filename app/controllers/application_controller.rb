@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
     root_path  # O el path que corresponda tras iniciar sesión
   end
 
+  def authenticate_user!
+    super
+    # flash.delete(:alert) # <-- comenta o borra esta línea
+  end
+
   protected
 
   def configure_permitted_parameters

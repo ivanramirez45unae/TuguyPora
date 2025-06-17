@@ -40,7 +40,7 @@
 
   <div class="field">
     <%= f.label :fec_nacimiento, "Fecha de Nacimiento" %><br />
-    <%= f.date_select :fec_nacimiento, start_year: 1930, end_year: Date.today.year, prompt: { day: 'Día', month: 'Mes', year: 'Año' } %>
+    <%= f.date_field :fec_nacimiento %>
   </div>
 
   <div class="field">

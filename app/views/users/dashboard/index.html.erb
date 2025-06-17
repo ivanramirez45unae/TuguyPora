@@ -11,6 +11,14 @@
         <p><strong>📍 Dirección:</strong> <%= u.direccion %></p>
         <p><strong>📞 Teléfono:</strong> <%= u.num_telefono %></p>
         <p><strong>🕐 Horario:</strong> </p>
+        <ul style="margin-left: 15px;">
+          <% u.horarios.includes(:dia).order('dia_id ASC').each do |horario| %>
+            <li>
+              <strong><%= horario.dia.nombre %>:</strong>
+              <%= horario.abre_a.strftime("%H:%M") %> - <%= horario.cierra_a.strftime("%H:%M") %>
+            </li>
+          <% end %>
+        </ul>
       </div>
 
       <% if current_user.donante %>

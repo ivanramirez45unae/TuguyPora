@@ -20,12 +20,19 @@
 
   <div>
     <%= f.label :fecha_tentativa, "Fecha Tentativa" %><br>
-    <%= f.date_field :fecha_tentativa %>
+    <%= f.date_field :fecha_tentativa, min: Date.today %>
   </div>
 
   <div>
     <%= f.label :hora_tentativa, "Hora Tentativa" %><br>
-    <%= f.time_field :hora_tentativa %>
+
+    <%= f.select :hora_tentativa_hour,
+      (07..18).map { |h| ["#{h.to_s.rjust(2, '0')}", h] },
+      prompt: "Hora" %>
+
+    <%= f.select :hora_tentativa_minute,
+      [["00", 0], ["15", 15], ["30", 30], ["45", 45]],
+      prompt: "Minuto" %>
   </div>
 
   <div style="margin-top: 20px;">

@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   get "mi_perfil", to: "perfil#show", as: "mi_perfil"
+  devise_scope :user do
+    get "/logout", to: "devise/sessions#destroy"
+  end
+
+
   devise_for :users
 
   resources :solicitudes, only: [ :index, :new, :create, :edit, :update, :destroy ]

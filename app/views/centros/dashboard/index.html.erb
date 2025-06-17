@@ -24,8 +24,8 @@
         <td style="padding: 10px;"><%= p.id %></td>
         <td style="padding: 10px;"><%= User.find(p.user_id).nombre rescue "Sin datos" %></td>
         <td style="padding: 10px;"><%= Ubicacion.find(p.ubicacion_id).nombre rescue "Desconocida" %></td>
-        <td style="padding: 10px;"><%= p.fecha_tentativa.strftime("%d/%m/%Y") %></td>
-        <td style="padding: 10px;"><%= p.hora_tentativa.strftime("%H:%M") %></td>
+        <td style="padding: 10px;"><%= p.fecha_tentativa&.strftime("%d/%m/%Y") || "Sin fecha" %></td>
+        <td style="padding: 10px;"><%= p.hora_tentativa&.strftime("%H:%M") || "Sin hora" %></td>
         <td style="padding: 10px;">
           <% if p.solicitud_id.present? %>
             <%= link_to "Solicitud ##{p.solicitud_id}", solicitud_path(p.solicitud_id), style: "color: #c00000;" %>

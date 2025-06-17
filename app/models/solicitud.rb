@@ -6,6 +6,7 @@ class Solicitud < ApplicationRecord
   belongs_to :user
   belongs_to :ubicacion, foreign_key: "location_id"
   has_many :postulaciones
+  has_many :donaciones
 
   validates :nombre_paciente, presence: true
   validates :cin_paciente, presence: true, format: { with: /\A\d{7,8}\z/, message: "debe tener solo números y entre 7 y 8 dígitos" }

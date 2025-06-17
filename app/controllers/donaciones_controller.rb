@@ -37,7 +37,12 @@ class DonacionesController < ApplicationController
 
     if @donacion.save
       @postulacion.update(estado: "C")
-      donante.update(
+
+      Postulacion.where(user_id: @postulacion.user_id, estado: "P")
+                  .where.not(id: @postulacion.id)
+                  .update_all(estado: "V")
+
+      @donacion.donante.update(
         ult_donacion_fecha: @donacion.fecha_donacion,
         ult_donacion_verificado: true
       )

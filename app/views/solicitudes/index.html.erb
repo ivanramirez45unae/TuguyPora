@@ -29,14 +29,13 @@
         <!-- Estado -->
         <p style="margin-top: 15px;">
           🔄 <strong>Estado:</strong>
-          <% if donaciones_confirmadas > 0 || postulaciones_count > 0 %>
-            <% if donaciones_confirmadas > 0 %>
-              <%= pluralize(donaciones_confirmadas, 'donación', 'donaciones') %>
-            <% end %>
-            <% if donaciones_confirmadas > 0 && postulaciones_count > 0 %> y <% end %>
-            <% if postulaciones_count > 0 %>
-              <%= pluralize(postulaciones_count, 'postulación', 'postulaciones') %>
-            <% end %>
+          <% p_count = solicitud.postulaciones_pendientes_count.to_i
+            d_count = solicitud.donaciones_count.to_i %>
+
+          <% if d_count > 0 || p_count > 0 %>
+            <%= pluralize(d_count, 'donación confirmada', 'donaciones confirmadas') if d_count > 0 %>
+            <%= ' y ' if d_count > 0 && p_count > 0 %>
+            <%= pluralize(p_count, 'postulación pendiente') if p_count > 0 %>
           <% else %>
             <em>0 postulaciones</em>
           <% end %>

@@ -5,4 +5,5 @@ class Ubicacion < ApplicationRecord
   has_many :solicitudes
   has_many :postulaciones
   belongs_to :user
+  has_many :horarios
 end

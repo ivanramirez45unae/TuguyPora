@@ -20,11 +20,11 @@
     <% @donaciones.each do |donacion| %>
       <tr>
         <td style="padding: 10px;"><%= donacion.id %></td>
-        <td style="padding: 10px;"><%= l(donacion.fecha_donacion, format: :short) %></td>
+        <td style="padding: 10px;"><%= donacion.fecha_donacion.strftime("%d/%m/%Y") %></td>
         <td style="padding: 10px;"><%= donacion.donante&.user&.nombre || "Sin nombre" %></td>
         <td style="padding: 10px;"><%= donacion.tipo_sangre %></td>
         <td style="padding: 10px;"><%= number_with_delimiter(donacion.volumen_ml) %></td>
-        <td style="padding: 10px;"><%= donacion.solicitud&.titulo || "<em>Sin solicitud</em>".html_safe %></td>
+        <td style="padding: 10px;"><%= donacion.solicitud&.nombre_paciente || "<em>Sin solicitud</em>".html_safe %></td>
         <td style="padding: 10px;"><%= donacion.ubicacion&.nombre || "<em>Sin asignar</em>".html_safe %></td>
         <td style="padding: 10px;"><%= User.find_by(id: donacion.verificado_por_usuario)&.nombre || "<em>Sin verificar</em>".html_safe %></td>
       </tr>

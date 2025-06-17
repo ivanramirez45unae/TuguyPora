@@ -1,15 +1,33 @@
+.flash-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000; /* fondo negro para todos */
+  color: #fff; /* texto blanco para todos */
+  padding: 12px 18px;
+  border-radius: 6px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  transition: opacity 0.5s ease-in-out;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Eliminá estas reglas porque no las necesitas ya */
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+.flash-popup.notice {
+  background-color: #222;
+}
+
+.flash-popup.alert {
+  background-color: #b00020;
+}
+*/
+
+.flash-popup.hide {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+}
