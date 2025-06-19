@@ -7,6 +7,8 @@ class HomeController < ApplicationController
       redirect_to users_dashboard_path
     when "centro"
       redirect_to centros_dashboard_path
+    when "admin"
+      redirect_to admin_dashboard_path
     else
       redirect_to root_path, alert: "Dashboard no disponible para este rol."
     end

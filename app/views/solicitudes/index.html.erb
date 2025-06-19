@@ -1,65 +1,112 @@
 <%= render 'shared/navbar' %>
 
-<h1 style="text-align: center; color: #c00000; margin-bottom: 30px;">🩸 Solicitudes de Sangre</h1>
+<div style="max-width: 1200px; margin: 40px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; padding: 0 15px;">
 
-<div style="text-align: center; margin-bottom: 30px;">
-  <%= link_to '➕ Crear nueva solicitud', new_solicitud_path, class: "btn btn-danger", style: "padding: 12px 24px; font-weight: bold;" %>
-</div>
+  <h1 style="text-align: center; color: #b71c1c; margin-bottom: 35px; font-size: 30px; font-weight: 700;">
+    🩸 Solicitudes de Sangre
+  </h1>
 
-<% if @solicitudes.any? %>
-  <div class="solicitudes-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
-    <% @solicitudes.each do |solicitud| %>
-      <% postulaciones_count = solicitud.postulaciones.count rescue 0 %>
-      <% donaciones_confirmadas = solicitud.donaciones.count rescue 0 %>
-
-      <div style="background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); position: relative;">
-
-        <!-- Publicado por -->
-        <p style="font-size: 13px; color: #999; margin-bottom: 12px;">
-          📢 <strong><%= solicitud.user.nombre %></strong> publicó esta solicitud
-        </p>
-
-        <h3 style="margin-top: 0; color: #c00000;"><%= solicitud.nombre_paciente %></h3>
-        <p><strong>🆔 C.I.N.:</strong> <%= solicitud.cin_paciente %></p>
-        <p><strong>💉 Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %></p>
-        <p><strong>📍 Ubicación:</strong> <%= solicitud.ubicacion.nombre %></p>
-        <p><strong>🧑‍🤝‍🧑 Donantes requeridos:</strong> <%= solicitud.donantes_requeridos %></p>
-        <p><strong>📝 Detalles:</strong> <%= solicitud.detalles.presence || "Sin detalles adicionales" %></p>
-
-        <!-- Estado -->
-        <p style="margin-top: 15px;">
-          🔄 <strong>Estado:</strong>
-          <% p_count = solicitud.postulaciones_pendientes_count.to_i
-            d_count = solicitud.donaciones_count.to_i %>
-
-          <% if d_count > 0 || p_count > 0 %>
-            <%= pluralize(d_count, 'donación confirmada', 'donaciones confirmadas') if d_count > 0 %>
-            <%= ' y ' if d_count > 0 && p_count > 0 %>
-            <%= pluralize(p_count, 'postulación pendiente') if p_count > 0 %>
-          <% else %>
-            <em>0 postulaciones</em>
-          <% end %>
-        </p>
-
-        <!-- Acciones -->
-        <div style="margin-top: 20px;">
-          <% if solicitud.user == current_user %>
-            <%= link_to '✏️ Editar', edit_solicitud_path(solicitud), class: 'btn btn-outline-primary', style: 'margin-right: 10px;' %>
-            <%= button_to '🗑️ Eliminar', solicitud_path(solicitud), method: :delete,
-                  form: { data: { confirm: '¿Estás seguro que deseas eliminar esta solicitud?' } },
-                  class: 'btn btn-outline-danger' %>
-          <% else %>
-            <% if current_user&.donante %>
-              <%= link_to '🤝 Donar', new_postulacion_path(solicitud_id: solicitud.id), class: 'btn btn-success' %>
-            <% else %>
-              <%= link_to 'Registrarse como donante', new_donante_path, class: 'btn btn-warning' %>
-              <p class="text-danger mt-2">⚠️ Debes ser donante para postularte.</p>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+  <div style="text-align: center; margin-bottom: 35px;">
+    <%= link_to '➕ Crear nueva solicitud', new_solicitud_path,
+          class: 'btn btn-danger',
+          style: 'padding: 12px 28px; font-weight: 600; font-size: 16px;' %>
   </div>
-<% else %>
-  <p style="text-align: center; font-size: 18px; color: #777;">No hay solicitudes aún.</p>
-<% end %>
+
+  <% if @solicitudes.any? %>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px;">
+      <% @solicitudes.each do |solicitud| %>
+        <% p_count = solicitud.postulaciones_pendientes_count.to_i
+           d_count = solicitud.donaciones_count.to_i %>
+
+        <div style="
+          background: #fff;
+          border-radius: 14px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        ">
+
+          <!-- Encabezado gris claro con autor -->
+          <div style="background: #f7f7f7; padding: 12px 20px;">
+            <p style="margin: 0; font-size: 13px; color: #666;">
+              📢 Publicado por <strong><%= solicitud.user.nombre %></strong>
+            </p>
+          </div>
+
+          <!-- Cuerpo principal -->
+          <div style="padding: 22px 20px; flex-grow: 1;">
+            <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 20px; color: #2c3e50; font-weight: 700;">
+              👤 Paciente: <span style="color: #b71c1c;"><%= solicitud.nombre_paciente %></span>
+            </h3>
+
+            <div style="font-size: 15px; line-height: 1.55;">
+              <p style="margin: 4px 0;"><strong>🆔 C.I.N.:</strong> <%= solicitud.cin_paciente %></p>
+              <p style="margin: 4px 0;"><strong>💉 Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %></p>
+              <p style="margin: 4px 0;"><strong>📍 Ubicación:</strong> <%= solicitud.ubicacion.nombre %></p>
+              <p style="margin: 4px 0;"><strong>🧑‍🤝‍🧑 Donantes requeridos:</strong> <%= solicitud.donantes_requeridos %></p>
+              <p style="margin: 6px 0 0;"><strong>📝 Detalles:</strong> <%= solicitud.detalles.presence || 'Sin detalles adicionales' %></p>
+            </div>
+
+            <!-- Estado como badges -->
+            <div style="margin-top: 16px;">
+              <span style="
+                background: #b71c1c;
+                color: #fff;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 13px;
+                margin-right: 6px;
+              ">
+                <%= d_count.positive? ? "#{d_count} donaciones confirmadas" : "0 donaciones" %>
+              </span>
+              <span style="
+                background: #e67e22;
+                color: #fff;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 13px;
+              ">
+                <%= p_count.positive? ? "#{p_count} postulaciones" : "0 postulaciones" %>
+              </span>
+            </div>
+          </div>
+
+          <!-- Pie con acciones -->
+          <div style="padding: 18px 20px; border-top: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px;">
+            <% if solicitud.user == current_user %>
+              <%= link_to '✏️ Editar', edit_solicitud_path(solicitud),
+                    class: 'btn btn-outline-primary',
+                    style: 'flex: 1 1 120px;' %>
+
+              <%= button_to '🗑️ Eliminar', solicitud_path(solicitud), method: :delete,
+                    form: { data: { confirm: '¿Estás seguro que deseas eliminar esta solicitud?' } },
+                    class: 'btn btn-outline-danger',
+                    style: 'flex: 1 1 120px;' %>
+            <% else %>
+              <% if current_user&.donante %>
+                <%= link_to '❤️ Donar', new_postulacion_path(solicitud_id: solicitud.id),
+                        style: 'display: inline-block; width: 100%; padding: 10px 0;
+                        background: #b71c1c; color: #fff; text-align: center;
+                        border: none; border-radius: 8px; font-weight: 600;
+                        font-size: 15px; text-decoration: none;
+                        transition: background 0.3s ease, transform 0.2s ease;',
+                onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
+                onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
+              <% else %>
+                <%= link_to 'Registrarse como donante', new_donante_path,
+                      class: 'btn btn-warning',
+                      style: 'flex: 1 1 100%;' %>
+                <p style="color: #c62828; font-size: 13px; width: 100%; margin: 4px 0 0;">
+                  ⚠️ Debes ser donante para postularte.
+                </p>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p style="text-align: center; font-size: 18px; color: #777;">No hay solicitudes aún.</p>
+  <% end %>
+</div>

@@ -133,7 +133,7 @@
           <p><strong>Ubicación:</strong> <%= d.ubicacion&.nombre || "No especificada" %></p>
           <p><strong>Nº de postulación:</strong> <%= d.postulacion_id %></p>
           <p><strong>Tipo de donación:</strong>
-            <%= d.solicitud.present? ? "Por reposición (Solicitud ##{d.solicitud.id})" : "Voluntaria" %>
+            <%= d.solicitud.present? ? "Por reposición (Para #{d.solicitud.nombre_paciente})" : "Voluntaria" %>
           </p>
           <p>✔️ <strong>Verificada por centro ID:</strong> <%= d.verificado_por_usuario || "No verificado" %></p>
         </div>

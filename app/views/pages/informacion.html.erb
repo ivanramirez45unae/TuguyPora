@@ -1,0 +1,95 @@
+<%= render 'shared/navbar' %>
+<div style="max-width: 960px; margin: 40px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; line-height: 1.6; padding: 0 15px;">
+
+  <!-- Encabezado principal -->
+  <h1 style="text-align: center; color: #b71c1c; margin-bottom: 30px; font-size: 32px; font-weight: 700;">
+    🩸 Información y Requisitos para Donar Sangre
+  </h1>
+
+  <!-- Por qué es importante -->
+  <section style="margin-bottom: 40px;">
+    <h2 style="color: #2c3e50; font-size: 24px; font-weight: 600;">¿Por qué donar sangre?</h2>
+    <p>En Paraguay se necesitan miles de transfusiones cada año y el departamento de <strong>Itapúa</strong> no es la excepción. Una sola donación puede salvar hasta tres vidas. Al donar:</p>
+    <ul style="margin-left: 20px;">
+      <li>Ayudás a pacientes en cirugías, accidentes y tratamientos crónicos.</li>
+      <li>Fortalecés el sistema de salud local y fomentás la solidaridad en nuestra comunidad.</li>
+      <li>Contribuís a que los bancos de sangre estén preparados ante emergencias.</li>
+    </ul>
+  </section>
+
+  <!-- Requisitos básicos -->
+  <section style="margin-bottom: 40px;">
+    <h2 style="color: #2c3e50; font-size: 24px; font-weight: 600;">Requisitos básicos</h2>
+    <ul style="margin-left: 20px;">
+      <li>Tener entre 18 y 65 años.</li>
+      <li>Pesar al menos 50&nbsp;kg.</li>
+      <li>Gozar de buena salud general (sin fiebre, gripe ni infecciones recientes).</li>
+      <li>Presentar cédula de identidad vigente.</li>
+      <li>Haber dormido al menos 6 horas y tomado un desayuno ligero (sin lácteos grasos).</li>
+      <li>Esperar 3 meses entre donaciones (hombres) y 4 meses (mujeres).</li>
+    </ul>
+  </section>
+
+  <!-- Mitos y realidades -->
+  <section style="margin-bottom: 40px;">
+    <h2 style="color: #2c3e50; font-size: 24px; font-weight: 600;">Mitos comunes & Realidades</h2>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">Mito 1: “Donar sangre engorda o adelgaza”</summary>
+      <p style="margin-top: 6px;">❌ Falso. Donar sangre no altera tu peso; el cuerpo repone el volumen en 24 h sin cambiar tu metabolismo.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">Mito 2: “Si tengo tatuajes no puedo donar jamás”</summary>
+      <p style="margin-top: 6px;">❌ Falso. Podés donar 1 año después de hacerte un tatuaje o piercing, siempre que esté cicatrizado y realizado en condiciones higiénicas.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">Mito 3: “Las personas con diabetes no pueden donar”</summary>
+      <p style="margin-top: 6px;">Depende. Si tu diabetes está controlada sólo con dieta o con medicación oral (no insulina) y te sentís bien, podés donar. Consultá primero con el personal médico.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">Mito 4: “Las mujeres embarazadas pueden donar”</summary>
+      <p style="margin-top: 6px;">❌ Falso. El embarazo y la lactancia excluyen temporalmente la donación; se puede donar 6 meses después del parto o del fin de la lactancia.</p>
+    </details>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <section style="margin-bottom: 40px;">
+    <h2 style="color: #2c3e50; font-size: 24px; font-weight: 600;">Preguntas frecuentes</h2>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">¿Donar sangre duele?</summary>
+      <p style="margin-top: 6px;">Solo se siente un pinchazo leve al inicio. El procedimiento es rápido y seguro.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">¿Cuánto tiempo lleva el proceso?</summary>
+      <p style="margin-top: 6px;">Todo el proceso, desde la entrevista hasta la colación final, demora unos 30 – 45 minutos.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">¿Puedo donar si tomo medicamentos?</summary>
+      <p style="margin-top: 6px;">Depende del medicamento. Traé la receta o el nombre del fármaco y el equipo médico evaluará tu caso.</p>
+    </details>
+
+    <details style="margin-bottom: 10px;">
+      <summary style="cursor: pointer; font-weight: 600;">¿Necesito estar en ayunas?</summary>
+      <p style="margin-top: 6px;">No. Vení desayunado ligeramente (sin alimentos grasos) y bien hidratado.</p>
+    </details>
+  </section>
+
+  <!-- Llamado a la acción -->
+  <section style="text-align: center; margin-bottom: 50px;">
+    <p style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">
+      ¡Convertite en héroe hoy mismo!
+    </p>
+    <%= link_to '❤️ Quiero donar ahora', users_dashboard_path, class: 'btn btn-success', style: 'padding: 14px 32px; font-size: 18px; font-weight: 600;' %>
+    <p style="margin-top: 15px; font-size: 15px; color: #555;">
+      Tu donación puede marcar la diferencia para las familias de Itapúa y de todo el país.
+    </p>
+  </section>
+
+</div>
+

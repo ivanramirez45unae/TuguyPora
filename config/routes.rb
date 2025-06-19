@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    get "dashboard/index"
+  end
+  get "informacion", to: "pages#informacion"
   get "mi_perfil", to: "perfil#show", as: "mi_perfil"
   devise_scope :user do
     get "/logout", to: "devise/sessions#destroy"
@@ -24,5 +28,12 @@ resources :donaciones, only: [ :show ]
 
   namespace :centros do
     get "dashboard", to: "dashboard#index"
+  end
+
+  namespace :admin do
+    resources :users do
+      patch :deactivate, on: :member
+    end
+    get "dashboard", to: "dashboard#index", as: :dashboard
   end
 end

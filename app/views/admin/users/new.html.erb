@@ -1,0 +1,56 @@
+<h1>➕ Nuevo Usuario</h1>
+
+<%= form_with model: [:admin, @user], local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :nombre %>
+    <%= f.text_field :nombre, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :nombredeusuario, "Nombre de usuario" %>
+    <%= f.text_field :nombredeusuario, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :email %>
+    <%= f.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :rol %>
+    <%= f.select :rol, [["Usuario", "user"], ["Centro", "centro"]], {}, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :num_telefono, "Teléfono" %>
+    <%= f.text_field :num_telefono, class: "form-control" %>
+  </div>
+
+    <div class="field">
+    <%= f.label :fec_nacimiento, "Fecha de Nacimiento" %><br />
+    <%= f.date_field :fec_nacimiento %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :direccion %>
+    <%= f.text_field :direccion, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :genero %>
+    <%= f.select :genero, ["Masculino", "Femenino", "Otro"], {}, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password %>
+    <%= f.password_field :password, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Crear Usuario", class: "btn btn-primary" %>
+  <%= link_to "Cancelar", admin_dashboard_path, class: "btn btn-secondary ms-2" %>
+<% end %>

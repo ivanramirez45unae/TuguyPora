@@ -1,0 +1,61 @@
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+  <div>
+    <%= link_to admin_dashboard_path, class: "btn btn-outline-primary", style: "padding: 6px 12px; font-size: 14px;" do %>
+      ← Volver al Dashboard
+    <% end %>
+  </div>
+
+  <h1 style="margin: 0 auto; color:#b71c1c; text-align: center;">✏️ Editar Usuario</h1>
+</div>
+
+<%= form_with(model: [:admin, @user], local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :nombre, "Nombre completo" %>
+    <%= f.text_field :nombre, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :nombredeusuario, "Usuario" %>
+    <%= f.text_field :nombredeusuario, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :email %>
+    <%= f.email_field :email, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :rol, "Rol" %>
+    <%= f.select :rol,
+                 [["Usuario","user"],["Centro","centro"],["Admin","admin"]],
+                 {}, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :num_telefono, "Teléfono" %>
+    <%= f.text_field :num_telefono, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :direccion %>
+    <%= f.text_field :direccion, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :genero, "Género" %>
+    <%= f.select :genero, ["Femenino","Masculino","Otro"], {}, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password, "Nueva contraseña (opcional)" %>
+    <%= f.password_field :password, class:"form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_confirmation, "Confirmar contraseña" %>
+    <%= f.password_field :password_confirmation, class:"form-control" %>
+  </div>
+
+  <%= f.submit "Actualizar", class:"btn btn-success" %>
+  <%= link_to "Cancelar", admin_users_path, class:"btn btn-secondary ms-2" %>
+<% end %>

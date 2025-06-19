@@ -41,7 +41,7 @@
         # Usa el dashboard real como “inicio” del usuario logueado;
         # para invitados seguiría siendo root_path.
         ["INICIO", current_user ? users_dashboard_path : root_path],
-        ["Información y requisitos", "#"],
+        ["Información y requisitos", informacion_path],
         ["Solicitudes", solicitudes_path],
         ["Mi perfil", mi_perfil_path]
       ].map do |label, path|

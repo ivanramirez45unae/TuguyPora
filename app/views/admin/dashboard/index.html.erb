@@ -1,0 +1,53 @@
+<h1 style="text-align: center; color: #2c3e50; margin-bottom: 10px;">👥 Usuarios Registrados</h1>
+
+<div style="text-align: center; margin-bottom: 30px;">
+  <%= button_to 'Cerrar sesión',
+        destroy_user_session_path,
+        method: :delete,
+        data: { turbo: false, confirm: '¿Está seguro de que quiere cerrar sesión?' },
+        class: 'btn btn-outline-danger',
+        style: 'padding: 10px 20px; font-size: 16px; border-radius: 8px; border-width: 2px;' %>
+</div>
+
+<% if @users.any? %>
+  <div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+      <thead style="background-color: #273b30; color: white;">
+        <tr>
+          <th style="padding: 12px;">👤 Nombre</th>
+          <th style="padding: 12px;">📧 Email</th>
+          <th style="padding: 12px;">🔐 Rol</th>
+          <th style="padding: 12px;">⚙️ Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |u| %>
+          <tr style="text-align: center; border-top: 1px solid #eee;">
+            <td style="padding: 12px;"><%= u.nombre %></td>
+            <td style="padding: 12px;"><%= u.email %></td>
+            <td style="padding: 12px;"><%= u.rol.capitalize %></td>
+            <td style="padding: 12px;">
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+                <%= link_to '✏️ Editar', edit_admin_user_path(u), class: 'btn btn-outline-primary btn-sm' %>
+                <%= button_to '🚫 Desactivar', deactivate_admin_user_path(u),
+                      method: :patch,
+                      data: { confirm: '¿Desactivar usuario?' },
+                      class: 'btn btn-outline-warning btn-sm' %>
+                <%= button_to '🗑️ Eliminar', admin_user_path(u),
+                      method: :delete,
+                      data: { confirm: '¿Eliminar usuario?' },
+                      class: 'btn btn-outline-danger btn-sm' %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <p style="text-align: center; color: #999;">No hay usuarios registrados.</p>
+<% end %>
+
+<div style="margin-top: 20px; text-align: center;">
+  <%= link_to "➕ Nuevo Usuario", new_admin_user_path, class: "btn btn-primary", style: "padding: 10px 20px; font-size: 16px;" %>
+</div>
