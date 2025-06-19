@@ -28,7 +28,9 @@ resources :donaciones, only: [ :show ]
 
   namespace :centros do
     get "dashboard", to: "dashboard#index"
+    get "perfil", to: "perfil#show", as: :perfil
   end
+
 
   namespace :admin do
     resources :users do

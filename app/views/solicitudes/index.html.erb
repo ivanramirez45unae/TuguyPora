@@ -84,19 +84,20 @@
                     class: 'btn btn-outline-danger',
                     style: 'flex: 1 1 120px;' %>
             <% else %>
-              <% if current_user&.donante %>
+              <% if current_user&.rol == "user" && current_user.donante %>
                 <%= link_to '❤️ Donar', new_postulacion_path(solicitud_id: solicitud.id),
-                        style: 'display: inline-block; width: 100%; padding: 10px 0;
-                        background: #b71c1c; color: #fff; text-align: center;
-                        border: none; border-radius: 8px; font-weight: 600;
-                        font-size: 15px; text-decoration: none;
-                        transition: background 0.3s ease, transform 0.2s ease;',
-                onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
-                onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
-              <% else %>
+                    style: 'display: inline-block; width: 100%; padding: 10px 0;
+                            background: #b71c1c; color: #fff; text-align: center;
+                            border: none; border-radius: 8px; font-weight: 600;
+                            font-size: 15px; text-decoration: none;
+                            transition: background 0.3s ease, transform 0.2s ease;',
+                    onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
+                    onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
+
+              <% elsif current_user&.rol == "user" && !current_user.donante %>
                 <%= link_to 'Registrarse como donante', new_donante_path,
-                      class: 'btn btn-warning',
-                      style: 'flex: 1 1 100%;' %>
+                    class: 'btn btn-warning',
+                    style: 'flex: 1 1 100%;' %>
                 <p style="color: #c62828; font-size: 13px; width: 100%; margin: 4px 0 0;">
                   ⚠️ Debes ser donante para postularte.
                 </p>

@@ -23,7 +23,7 @@
         ["Donaciones", donaciones_path],
         ["Solicitudes", solicitudes_path],
         ["Donantes", donantes_path],
-        ["Mi perfil", mi_perfil_path]
+        ["Mi perfil", current_user.rol == "centro" ? centros_perfil_path : mi_perfil_path]
       ].map do |label, path|
         is_active = current_page?(path)
         border_color = is_active ? "#c00000" : "transparent"

@@ -1,0 +1,38 @@
+<%= render 'shared/navbar' %>
+
+<div class="perfil-container" style="max-width: 900px; margin: 30px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+
+  <div class="perfil-top" style="display: flex; align-items: center; gap: 30px; background: #fafafa; padding: 20px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
+
+    <!-- Foto de perfil -->
+    <div class="foto" style="flex-shrink: 0">
+      <div class="foto-placeholder" style="width: 130px; height: 130px; border-radius: 50%; background: #ddd; box-shadow: inset 0 0 8px #bbb;"></div>
+      <em style="display: block; margin-top: 15px; font-size: 28px; font-weight: 600; color: #333;"><%= @centro.nombre %></em>
+    </div>
+
+    <div>
+      <h2>Información del Centro</h2>
+
+      <% if @ubicacion.present? %>
+        <div style="margin-bottom: 20px;">
+          <h3>Ubicación: <%= @ubicacion.nombre || "Sin nombre" %></h3>
+          <p><strong>Dirección:</strong> <%= @ubicacion.direccion %></p>
+          <p><strong>Teléfono:</strong> <%= @ubicacion.num_telefono %></p>
+
+          <h4>Horarios:</h4>
+          <ul style="padding-left: 20px;">
+            <% @horarios.each do |horario| %>
+              <li style="margin-bottom: 3px;">
+                <strong><%= horario.dia.nombre %>:</strong>
+                <%= horario.abre_a.strftime("%H:%M") %> - <%= horario.cierra_a.strftime("%H:%M") %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% else %>
+        <p>No hay información de ubicación disponible.</p>
+      <% end %>
+    </div>
+
+  </div>
+</div>

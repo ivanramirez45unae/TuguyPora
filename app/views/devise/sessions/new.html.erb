@@ -1,9 +1,12 @@
-<h2>Iniciar sesión</h2>
+<!-- App title -->
+<h1 class="app-title">Tuguy Porã - Itapúa</h1>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<h2 class="title">Iniciar Sesión</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "form-card"}) do |f| %>
   <% if resource.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(resource.errors.count, "error") %> impide que se complete el inicio de sesión:</h2>
+    <div class="alert-error" role="alert">
+      <strong><%= pluralize(resource.errors.count, "error") %> impide iniciar sesión:</strong>
       <ul>
         <% resource.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -12,21 +15,122 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  <div class="input-group">
+    <%= f.label :email, "Correo electrónico", class: "input-label" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field", placeholder: "ejemplo@correo.com" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
+  <div class="input-group">
+    <%= f.label :password, "Contraseña", class: "input-label" %>
+    <%= f.password_field :password, autocomplete: "current-password", class: "input-field", placeholder: "Tu contraseña" %>
   </div>
 
-  <div class="field">
-    <%= f.submit "Iniciar sesión" %>
-  </div>
+  <button type="submit" class="btn-primary">Iniciar sesión</button>
 <% end %>
 
-<p><%= link_to "¿Olvidaste tu contraseña?", new_user_password_path %></p>
-<p><%= link_to "¿No tienes una cuenta?", new_user_registration_path %></p>
+<div class="links" style="margin-top: 1rem; text-align: center;">
+  <p><%= link_to "¿Olvidaste tu contraseña?", new_user_password_path, class: "link-text" %></p>
+  <p><%= link_to "¿No tienes una cuenta?", new_user_registration_path, class: "link-text" %></p>
+</div>
 
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #a1201f 0%, #c8382d 100%);
+    margin: 0; padding: 0;
+    display: flex; justify-content: center; align-items: center; min-height: 100vh;
+    flex-direction: column;
+  }
+  .app-title {
+    font-weight: 900;
+    font-size: 3rem;
+    color: #7a0e0c;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px #a1201f88;
+    user-select: none;
+  }
+  .form-card {
+    background: white;
+    padding: 3rem 2rem 2rem;
+    border-radius: 20px;
+    width: 400px;
+    box-shadow:
+      0 15px 25px rgba(161, 32, 31, 0.3),
+      0 8px 12px rgba(0, 0, 0, 0.12);
+  }
+  .title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: #7a0e0c;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .input-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #7a0e0c;
+    font-size: 0.9rem;
+  }
+  .input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e6b8b6;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-sizing: border-box;
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: #c8382d;
+    box-shadow: 0 0 10px #c8382daa;
+    background-color: #fff0f0;
+  }
+  .btn-primary {
+    width: 100%;
+    background: #c8382d;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 6px 14px rgba(200, 56, 45, 0.7);
+  }
+  .btn-primary:hover {
+    background: #7a0e0c;
+    box-shadow: 0 8px 18px rgba(122, 14, 12, 0.9);
+  }
+  .alert-error {
+    background: #fbeaea;
+    border: 1px solid #c8382d;
+    color: #7a0e0c;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+  }
+  .links {
+    text-align: center;
+  }
+  .link-text {
+    color: #7a0e0c;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .link-text:hover {
+    color: #c8382d;
+  }
+</style>
