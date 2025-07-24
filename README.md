@@ -2,30 +2,46 @@
 
 Plataforma digital para la optimización y promoción de la donación de sangre en el departamento de Itapúa - 2025
 
-## Información del proyecto
+# 🩸 App de Donación de Sangre
 
-Este README documenta los pasos necesarios para poner en marcha la aplicación.
+Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestionar campañas, donantes y solicitudes de sangre.
 
-### Requisitos
+---
 
-- Ruby version
-- System dependencies
+## ⚙️ Tecnologías
 
-### Configuración
+- Ruby on Rails  
+- HTML, CSS, JavaScript  
+- SQLite3 (modo desarrollo)
 
-- Database creation
-- Database initialization
+---
 
-### Cómo ejecutar pruebas
+## 🧱 Funcionalidades
 
-- How to run the test suite
+- Registro de donantes  
+- Gestión de campañas
+- Registro de centros
+- Solicitudes y seguimiento
 
-### Servicios utilizados
+---
 
-- Job queues
-- Cache servers
-- Search engines
+## 👤 Usuarios de prueba (EMAIL Y CONTRASEÑA)
 
-### Instrucciones de despliegue
+- **Admin:**  
+  `admin@tuapp.com` / `admin12345`  
+- **Centro de salud:**  
+  `ips@ejemplo.com` / `123456`  
+- **Donante:**  
+  `juan@gmail.com` / `juan2025`
 
-- Deployment instructions
+---
+
+## 🚀 Cómo ejecutar
+
+```bash
+git clone https://github.com/usuario/repositorio.git
+cd repositorio
+bundle install
+rails db:create db:migrate
+rails server
+
