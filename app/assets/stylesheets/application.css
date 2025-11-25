@@ -1,10 +1,19 @@
+@import "devise";
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .flash-popup {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #000; /* fondo negro para todos */
-  color: #fff; /* texto blanco para todos */
+  background-color: #000;
+  color: #fff;
   padding: 12px 18px;
   border-radius: 6px;
   z-index: 1000;
@@ -15,19 +24,197 @@
   text-align: center;
 }
 
-/* Eliminá estas reglas porque no las necesitas ya */
-/*
-.flash-popup.notice {
-  background-color: #222;
-}
-
-.flash-popup.alert {
-  background-color: #b00020;
-}
-*/
-
 .flash-popup.hide {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;
+}
+
+.top-hero {
+  background: linear-gradient(90deg, #c00000 0%, #a00000 100%);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  padding: 12px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 28px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.nav-left {
+  flex: 0 0 auto;
+}
+
+.nav-logo {
+  width: 120px;
+  height: auto;
+  display: block;
+}
+
+.nav-center {
+  display: flex;
+  gap: 28px;
+  justify-content: right;
+  flex: 1 1 auto;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #222;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px 6px;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-bottom-color 0.15s;
+}
+
+.nav-link:hover {
+  color: #c00000;
+  border-bottom-color: #c00000;
+}
+
+.nav-link.active {
+  color: #c00000;
+  border-bottom-color: #c00000;
+}
+
+.nav-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #d9d9d9;
+}
+
+.logout-btn {
+  background: #c00000;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.logout-btn:hover {
+  background: #a00000;
+}
+
+.login-link {
+  background: transparent;
+  border: 1px solid #c00000;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: #c00000;
+}
+
+.nav-profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Avatar */
+.nav-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  box-sizing: content-box;
+}
+
+.nav-avatar:hover {
+  transform: scale(1.05);
+  border-color: #c00000;
+  box-shadow: 0 0 0 2px #c00000;
+}
+
+/* Activo cuando estás en perfil/dashboard */
+.nav-avatar.active {
+  border-color: #c00000;
+  box-shadow: 0 0 0 2px #c00000;
+}
+
+/* Mantener borde rojo cuando dropdown está abierto */
+.nav-avatar.open {
+  border-color: #c00000;
+  box-shadow: 0 0 0 2px #c00000;
+}
+
+/* Si está activo y hover al mismo tiempo */
+.nav-avatar.active:hover,
+.nav-avatar.open:hover {
+  border-color: #c00000;
+  box-shadow: 0 0 0 2px #c00000;
+}
+
+/* Dropdown oculto por defecto */
+.nav-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  width: 160px;
+  display: none;
+  z-index: 20;
+}
+
+/* Dropdown visible */
+.nav-dropdown.show {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dropdown-item:hover,
+.dropdown-logout:hover {
+  background: #f1f1f1;
+}
+
+.dropdown-logout {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
 }

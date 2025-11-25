@@ -47,3 +47,35 @@ es:
       - oct
       - nov
       - dic
+
+  activerecord:
+    attributes:
+      user:
+        password_confirmation: "Contraseña"
+        email: "Correo electrónico"
+        password: "Contraseña"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "no puede quedar vacío"
+              not_found: "no registrado"
+      messages:
+        taken: "ya está en uso"
+        confirmation: "no coincide"
+        not_saved: "Inténtelo de nuevo:"
+
+  devise:
+    failure:
+      unauthenticated: ""
+    sessions:
+      user:
+        signed_in: ""
+    failure:
+      not_found_in_database: "Correo o contraseña incorrectos"
+      invalid: "Correo o contraseña incorrectos"
+      unauthenticated: ""
+    passwords:
+      send_instructions: "Se enviaron las instrucciones a tu correo electrónico"
+

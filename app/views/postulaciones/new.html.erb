@@ -1,3 +1,7 @@
+<%= render 'shared/navbar' %>
+<div class="login-wrapper form-wrapper">
+
+  <div class="login-card form-card">
 <h1>Nueva Postulación</h1>
 
 <%= form_with model: @postulacion, local: true do |f| %>
@@ -6,9 +10,14 @@
     <%= f.hidden_field :ubicacion_id, value: params[:ubicacion_id] %>
     <p><strong>Ubicación seleccionada:</strong> <%= Ubicacion.find(params[:ubicacion_id]).nombre %></p>
   <% else %>
-    <div>
-      <%= f.label :ubicacion_id, "Seleccionar punto de donación" %><br>
-      <%= f.collection_select :ubicacion_id, Ubicacion.all, :id, :nombre, prompt: "Selecciona una ubicación" %>
+    <div class="input-group">
+      <%= f.label :ubicacion_id, "Punto de donación", class: "input-label" %>
+      <div class="input-icon-container">
+        <%= f.collection_select :ubicacion_id, Ubicacion.all, :id, :nombre,
+          { prompt: "Selecciona una ubicación" },
+          class: "input-field input-field--dropdown",
+          required: true %>
+      </div>
     </div>
   <% end %>
 
@@ -18,24 +27,49 @@
     <p><strong>Postulando para paciente:</strong> <%= @solicitud.nombre_paciente %></p>
   <% end %>
 
-  <div>
-    <%= f.label :fecha_tentativa, "Fecha Tentativa" %><br>
-    <%= f.date_field :fecha_tentativa, min: Date.today %>
+  <div class="input-group">
+    <%= f.label :fecha_tentativa, "Fecha Tentativa", class: "input-label" %>
+    <div class="input-icon-container">
+      <%= f.date_field :fecha_tentativa,
+        min: Date.today,
+        class: "input-field",
+        required: true %>
+    </div>
   </div>
 
-  <div>
-    <%= f.label :hora_tentativa, "Hora Tentativa" %><br>
+  <div class="input-group">
+    <%= f.label :hora_tentativa, "Hora Tentativa", class: "input-label" %>
 
-    <%= f.select :hora_tentativa_hour,
-      (07..18).map { |h| ["#{h.to_s.rjust(2, '0')}", h] },
-      prompt: "Hora" %>
+    <div class="input-icon-container">
+      <%= f.select :hora_tentativa_hour,
+        (7..18).map { |h| ["#{h.to_s.rjust(2, '0')}", h] },
+        { prompt: "Horas" },
+        class: "input-field input-field--dropdown",
+        required: true %>
+    </div>
 
-    <%= f.select :hora_tentativa_minute,
-      [["00", 0], ["15", 15], ["30", 30], ["45", 45]],
-      prompt: "Minuto" %>
+    <div class="input-icon-container">
+      <%= f.select :hora_tentativa_minute,
+        [["00", 0], ["15", 15], ["30", 30], ["45", 45]],
+        { prompt: "Minutos" },
+        class: "input-field input-field--dropdown",
+        required: true %>
+    </div>
   </div>
+
+  <!-- <div class="input-group">
+    <%= f.label :hora_tentativa, "Hora Tentativa", class: "input-label" %>
+    <%= f.time_select :hora_tentativa, 
+          prompt: { hour: 'Hora', minute: 'Minuto' },
+          start_hour: 7, end_hour: 18,
+          minute_step: 15,
+          required: true,
+          class: "input-field input-field--dropdown" %>
+  </div> -->
 
   <div style="margin-top: 20px;">
-    <%= f.submit "Enviar Postulación", class: "btn btn-primary" %>
+    <%= f.submit "Crear postulación", class: "btn btn-primary" %>
   </div>
 <% end %>
+ </div>
+</div>

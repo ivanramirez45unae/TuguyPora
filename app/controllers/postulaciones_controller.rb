@@ -7,43 +7,36 @@ class PostulacionesController < ApplicationController
       return
     end
 
-    if current_user.postulaciones.where(estado: "P").count >= 3
-      redirect_back fallback_location: users_dashboard_path,
-                    flash: { alert: "Ya tienes 3 postulaciones pendientes. Primero espera a que sean resueltas antes de postular nuevamente." }
-      return
-    end
-
     @postulacion = Postulacion.new(ubicacion_id: params[:ubicacion_id], solicitud_id: params[:solicitud_id])
-
     @solicitud = Solicitud.find_by(id: params[:solicitud_id]) if params[:solicitud_id].present?
     @ubicacion = Ubicacion.find_by(id: params[:ubicacion_id]) if params[:ubicacion_id].present?
   end
 
   def create
-    puts "USUARIO ACTUAL: #{current_user.inspect}"
-
-    if current_user.postulaciones.where(estado: "P").count >= 3
-      flash[:alert] = "Ya tienes 3 postulaciones pendientes. Primero espera a que sean resueltas antes de postular nuevamente."
-      redirect_to root_path and return
-    end
-
-    # Combinar hora y minuto en hora_tentativa (string HH:MM)
-    if postulacion_params[:hora_tentativa_hour].present? && postulacion_params[:hora_tentativa_minute].present?
-      hora = postulacion_params[:hora_tentativa_hour].to_s.rjust(2, "0")
-      minuto = postulacion_params[:hora_tentativa_minute].to_s.rjust(2, "0")
-      params[:postulacion][:hora_tentativa] = "#{hora}:#{minuto}"
+    # Combinar hora y minuto en hora_tentativa
+    if params[:postulacion][:hora_tentativa_hour].present? && params[:postulacion][:hora_tentativa_minute].present?
+      hora = params[:postulacion].delete("hora_tentativa_hour").to_i
+      minuto = params[:postulacion].delete("hora_tentativa_minute").to_i
+      params[:postulacion][:hora_tentativa] = Time.new(2000, 1, 1, hora, minuto)
     end
 
     # Validar que la fecha no sea pasada
-    if postulacion_params[:fecha_tentativa].present? && postulacion_params[:fecha_tentativa].to_date < Date.today
-      flash[:alert] = "La fecha tentativa no puede ser una fecha pasada."
-      @postulacion = Postulacion.new(postulacion_params)
-      render :new and return
+    if postulacion_params[:fecha_tentativa].present?
+      fecha = postulacion_params[:fecha_tentativa].to_date
+      if fecha < Date.today
+        flash[:alert] = "La fecha tentativa no puede ser una fecha pasada."
+        @postulacion = Postulacion.new(postulacion_params)
+        render :new and return
+      elsif fecha > Date.today + 2.years
+        flash[:alert] = "La fecha tentativa no puede ser mayor a 2 años desde hoy."
+        @postulacion = Postulacion.new(postulacion_params)
+        render :new and return
+      end
     end
 
     # Validar que los minutos sean múltiplos de 15
     if params[:postulacion][:hora_tentativa].present?
-      minutos = params[:postulacion][:hora_tentativa].split(":")[1].to_i
+      minutos = params[:postulacion][:hora_tentativa].min
       unless [ 0, 15, 30, 45 ].include?(minutos)
         flash[:alert] = "Los minutos de la hora tentativa deben ser 00, 15, 30 o 45."
         @postulacion = Postulacion.new(postulacion_params)
@@ -58,7 +51,6 @@ class PostulacionesController < ApplicationController
     if @postulacion.save
       redirect_to root_path, notice: "Postulación creada con éxito."
     else
-      puts @postulacion.errors.full_messages
       flash[:alert] = @postulacion.errors.full_messages.to_sentence
       render :new
     end

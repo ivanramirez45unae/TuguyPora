@@ -1,0 +1,6 @@
+es:
+  errors:
+    messages:
+      taken: "ya está en uso"
+      confirmation: "no coincide"
+      not_saved: "Inténtelo de nuevo:"

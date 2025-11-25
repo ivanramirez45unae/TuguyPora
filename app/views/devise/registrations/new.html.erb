@@ -1,176 +1,222 @@
-<!-- App title -->
-<h1 class="app-title">Tuguy Porã - Itapúa</h1>
+<div class="login-background"></div>
 
-<h2 class="title">Registrarse</h2>
+<div class="login-wrapper">
+  <div class="login-card">
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: "form-card"}) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <div class="logo-container">
+      <%= image_tag "TuguyPora_logo.png", class: "logo-img" %>
+    </div>
 
-  <div class="input-group">
-    <%= f.label :email, "Correo electrónico", class: "input-label" %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-field", placeholder: "ejemplo@correo.com" %>
-  </div>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form-card" }) do |f| %>
 
-  <div class="input-group">
-    <%= f.label :password, "Contraseña", class: "input-label" %>
-    <% if @minimum_password_length %>
-      <em class="password-info">(<%= @minimum_password_length %> caracteres mínimo)</em>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <!-- EMAIL -->
+      <div class="input-group">
+        <%= f.label :email, "Correo electrónico", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+              <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
+            </svg>
+          </span>
+          <%= f.email_field :email,
+            required: true,
+            pattern: "\\A[^\\s@]+@[^\\s@]+\\.[^\\s@]+\\z",
+            class: "input-field",
+            placeholder: "ejemplo@correo.com" %>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="input-group">
+        <%= f.label :password, "Contraseña", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+            </svg>
+          </span>
+          <%= f.password_field :password,
+            required: true,
+            minlength: 6,
+            class: "input-field",
+            placeholder: "Creá tu contraseña" %>
+          <span class="toggle-password">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="eye-icon" viewBox="0 0 16 16">
+              <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- PASSWORD CONFIRMATION -->
+      <div class="input-group">
+        <%= f.label :password_confirmation, "Confirmar contraseña", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+            </svg>
+          </span>
+          <%= f.password_field :password_confirmation,
+            required: true,
+            minlength: 6,
+            class: "input-field",
+            placeholder: "Repetí tu contraseña",
+            id: "password_confirmation" %>
+          <span class="toggle-password">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="eye-icon" viewBox="0 0 16 16">
+              <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- NOMBRE -->
+      <div class="input-group">
+        <%= f.label :nombre, "Nombre y apellido", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-square" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+            </svg>
+          </span>
+          <%= f.text_field :nombre,
+            required: true,
+            pattern: "[A-Za-zÁÉÍÓÚáéíóúñÑ ]+",
+            class: "input-field",
+            placeholder: "Juan Pérez" %>
+        </div>
+      </div>
+
+      <!-- USERNAME -->
+      <div class="input-group">
+        <%= f.label :nombredeusuario, "Nombre de usuario", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+            </svg>
+          </span>
+          <%= f.text_field :nombredeusuario,
+            required: true,
+            pattern: "\\w+",
+            class: "input-field",
+            placeholder: "juanperez00" %>
+        </div>
+      </div>
+
+      <!-- TELEFONO -->
+      <div class="input-group">
+        <%= f.label :num_telefono, "Número de Teléfono", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+            </svg>
+          </span>
+          <%= f.text_field :num_telefono,
+            required: true,
+            pattern: "\\d{10}",
+            class: "input-field",
+            placeholder: "0999 999 999" %>
+        </div>
+      </div>
+
+      <!-- FECHA -->
+      <div class="input-group">
+        <%= f.label :fec_nacimiento, "Fecha de Nacimiento", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+            </svg>
+          </span>
+          <%= f.date_field :fec_nacimiento,
+            required: true,
+            max: (Date.today - 13.years),
+            class: "input-field" %>
+        </div>
+      </div>
+
+      <!-- DIRECCION -->
+      <div class="input-group">
+        <%= f.label :direccion, "Dirección", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411"/>
+            </svg>
+          </span>
+          <%= f.select :direccion,
+            [
+              ["Alto Verá", "Alto Verá"],
+              ["Bella Vista", "Bella Vista"],
+              ["Cambyretá", "Cambyretá"],
+              ["Capitán Meza", "Capitán Meza"],
+              ["Capitán Miranda", "Capitán Miranda"],
+              ["Carlos Antonio López", "Carlos Antonio López"],
+              ["Carmen del Paraná", "Carmen del Paraná"],
+              ["Coronel Bogado", "Coronel Bogado"],
+              ["Edelira", "Edelira"],
+              ["Encarnación", "Encarnación"],
+              ["Fram", "Fram"],
+              ["General Artigas", "General Artigas"],
+              ["General Delgado", "General Delgado"],
+              ["Hohenau", "Hohenau"],
+              ["Itapúa Poty", "Itapúa Poty"],
+              ["Jesús", "Jesús"],
+              ["José Leandro Oviedo", "José Leandro Oviedo"],
+              ["La Paz", "La Paz"],
+              ["Mayor Otaño", "Mayor Otaño"],
+              ["Natalio", "Natalio"],
+              ["Nueva Alborada", "Nueva Alborada"],
+              ["Obligado", "Obligado"],
+              ["Pirapó", "Pirapó"],
+              ["San Cosme y Damián", "San Cosme y Damián"],
+              ["San Juan del Paraná", "San Juan del Paraná"],
+              ["San Pedro del Paraná", "San Pedro del Paraná"],
+              ["San Rafael del Paraná", "San Rafael del Paraná"],
+              ["Tomás Romero Pereira", "Tomás Romero Pereira"],
+              ["Trinidad", "Trinidad"],
+              ["Yatytay", "Yatytay"]
+            ],
+            { include_blank: "Seleccione su distrito" },
+            class: "input-field input-field--dropdown",
+            required: true %>
+        </div>
+      </div>
+
+      <!-- GENERO -->
+      <div class="input-group">
+        <%= f.label :genero, "Género", class: "input-label" %>
+        <div class="input-icon-container">
+          <span class="icon-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gender-ambiguous" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"/>
+            </svg>
+          </span>
+          <%= f.select :genero,
+            [["Masculino", "Masculino"], ["Femenino", "Femenino"], ["Otro", "Otro"]],
+            { include_blank: "Seleccione un género" },
+            required: true,
+            class: "input-field input-field--dropdown" %>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">Registrarse</button>
+
     <% end %>
-    <%= f.password_field :password, autocomplete: "new-password", class: "input-field", placeholder: "Tu contraseña" %>
+
+    <div class="links" style="margin-top: 1rem; text-align: center;">
+      <p><%= link_to "Iniciar sesión", new_user_session_path, class: "link-text" %></p>
+    </div>
+
   </div>
-
-  <div class="input-group">
-    <%= f.label :password_confirmation, "Confirmar contraseña", class: "input-label" %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-field", placeholder: "Repite tu contraseña" %>
-  </div>
-
-  <hr class="separator">
-
-  <div class="input-group">
-    <%= f.label :nombre, "Nombre completo", class: "input-label" %>
-    <%= f.text_field :nombre, class: "input-field", placeholder: "Tu nombre" %>
-  </div>
-
-  <div class="input-group">
-    <%= f.label :nombredeusuario, "Nombre de usuario", class: "input-label" %>
-    <%= f.text_field :nombredeusuario, class: "input-field", placeholder: "Tu usuario" %>
-  </div>
-
-  <div class="input-group">
-    <%= f.label :num_telefono, "Número de Teléfono", class: "input-label" %>
-    <%= f.text_field :num_telefono, class: "input-field", placeholder: "09XX XXX XXX" %>
-  </div>
-
-  <div class="input-group">
-    <%= f.label :fec_nacimiento, "Fecha de Nacimiento", class: "input-label" %>
-    <%= f.date_field :fec_nacimiento, class: "input-field" %>
-  </div>
-
-  <div class="input-group">
-    <%= f.label :direccion, "Dirección", class: "input-label" %>
-    <%= f.text_field :direccion, class: "input-field", placeholder: "Tu dirección" %>
-  </div>
-
-  <div class="input-group">
-    <%= f.label :genero, "Género", class: "input-label" %>
-    <%= f.select :genero, ["Masculino", "Femenino", "Otro"], prompt: "Seleccione un género", class: "input-field" %>
-  </div>
-
-  <button type="submit" class="btn-primary">Registrarse</button>
-<% end %>
-
-<div class="links" style="margin-top: 1rem; text-align: center;">
-  <p><%= link_to "¿Ya tienes una cuenta? Inicia sesión", new_user_session_path, class: "link-text" %></p>
 </div>
 
-<style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #a1201f 0%, #c8382d 100%);
-    margin: 0; padding: 0;
-    display: flex; justify-content: center; align-items: center; min-height: 100vh;
-    flex-direction: column;
-  }
-  .app-title {
-    font-weight: 900;
-    font-size: 3rem;
-    color: #ffffffff;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    letter-spacing: 2px;
-    user-select: none;
-  }
-  .form-card {
-    background: white;
-    padding: 3rem 2rem 2rem;
-    border-radius: 20px;
-    width: 420px;
-    box-shadow:
-      0 15px 25px rgba(161, 32, 31, 0.3),
-      0 8px 12px rgba(0, 0, 0, 0.12);
-  }
-  .title {
-    text-align: center;
-    font-weight: 800;
-    font-size: 2.5rem;
-    color: #ffffff;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-  }
-  .input-group {
-    margin-bottom: 1.3rem;
-    position: relative;
-  }
-  .input-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-    color: #7a0e0c;
-    font-size: 0.9rem;
-  }
-  .password-info {
-    color: #b94a48;
-    font-size: 0.85rem;
-    margin-left: 0.3rem;
-    font-style: italic;
-  }
-  .input-field {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e6b8b6;
-    border-radius: 12px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    box-sizing: border-box;
-  }
-  .input-field:focus {
-    outline: none;
-    border-color: #c8382d;
-    box-shadow: 0 0 10px #c8382daa;
-    background-color: #fff0f0;
-  }
-  .separator {
-    margin: 1.5rem 0;
-    border: none;
-    border-top: 2px solid #f0b0ad;
-  }
-  .btn-primary {
-    width: 100%;
-    background: #c8382d;
-    color: white;
-    font-weight: 700;
-    font-size: 1.2rem;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    box-shadow: 0 6px 14px rgba(200, 56, 45, 0.7);
-  }
-  .btn-primary:hover {
-    background: #7a0e0c;
-    box-shadow: 0 8px 18px rgba(122, 14, 12, 0.9);
-  }
-  .alert-error {
-    background: #fbeaea;
-    border: 1px solid #c8382d;
-    color: #7a0e0c;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 12px;
-  }
-  .links {
-    text-align: center;
-  }
-  .link-text {
-    color: #ffffff;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  .link-text:hover {
-    color: #f3cac7ff;
-  }
-</style>
+

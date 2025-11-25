@@ -20,16 +20,18 @@ class ApplicationController < ActionController::Base
       :num_telefono,
       :fec_nacimiento,
       :direccion,
-      :genero
-      # :rol  ← NO incluyas esto si el rol lo asignás por defecto
+      :genero,
+      :avatar
     ])
+
     devise_parameter_sanitizer.permit(:account_update, keys: [
       :nombre,
       :nombredeusuario,
       :num_telefono,
       :fec_nacimiento,
       :direccion,
-      :genero
+      :genero,
+      :avatar
     ])
   end
 end

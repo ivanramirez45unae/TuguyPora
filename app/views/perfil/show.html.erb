@@ -143,28 +143,19 @@
     <% end %>
   </div>
 
-  <!-- Postulaciones -->
-  <div id="postulaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
-    <% @postulaciones.each_with_index.reverse_each do |p, i| %>
-      <% if p.estado == "C" %>
-        <% fondo  = "#E6FFED" %>
-        <% borde  = "#28a745" %>
-        <% texto  = "Completada" %>
-        <% estilo = '' %>
-      <% elsif p.estado == "V" %>
-        <% fondo  = "#F5F5F5" %> 
-        <% borde  = "#6c757d" %> 
-        <% texto  = "Vencida" %> 
-        <% estilo = 'color: #6c757d; text-decoration: line-through;' %> 
-      <% else %><!-- Pendiente -->
-        <% fondo  = "#FFEDED" %>
-        <% borde  = "#dc3545" %>
-        <% texto  = "Pendiente" %>
-        <% estilo = '' %>
-      <% end %>
+<!-- Postulaciones -->
+<div id="postulaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
+  <% pendientes = @postulaciones.select { |p| p.estado == "P" } %>
+  
+  <% if pendientes.any? %>
+    <% pendientes.each_with_index.reverse_each do |p, i| %>
+      <% fondo  = "#FFEDED" %>
+      <% borde  = "#dc3545" %>
+      <% texto  = "Pendiente" %>
+      <% estilo = '' %>
 
       <div style="margin-bottom: 20px; padding: 15px; border: 2px solid <%= borde %>; border-radius: 8px; background-color: <%= fondo %>; <%= estilo %>">
-        <h4 style="margin-top:0; color:<%= borde %>;"><%= p.estado == "V" ? "❌ " : "📝 " %> Postulación Nº <%= i + 1 %> — <%= texto %></h4>
+        <h4 style="margin-top:0; color:<%= borde %>;">📝 Postulación Nº <%= i + 1 %> — <%= texto %></h4>
 
         <p>🗓️ <strong>Fecha tentativa:</strong> <%= p.fecha_tentativa&.strftime("%d/%m/%Y") || "—" %></p>
         <p>🕒 <strong>Hora tentativa:</strong> <%= p.hora_tentativa&.strftime("%H:%M") || "—" %></p>
@@ -179,7 +170,11 @@
         </p>
       </div>
     <% end %>
-  </div>
+  <% else %>
+    <p style="color: #6c757d;">No hay postulaciones pendientes.</p>
+  <% end %>
+</div>
+
 
 </div>
 

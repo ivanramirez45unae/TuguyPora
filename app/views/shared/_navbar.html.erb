@@ -1,77 +1,58 @@
-<div style="
-  background: linear-gradient(90deg, #c00000 0%, #a00000 100%);
-  padding: 16px 24px;
-  text-align: center;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all 0.3s ease-in-out;
-">
-  🩸 Tuguy Porã - Itapúa 🩸
-</div>
+<nav class="main-nav" role="navigation" aria-label="Main Navigation">
+  <div class="nav-left">
+    <%= link_to image_tag("TuguyPora_logo.png", alt: "Tuguy Porã", class: "nav-logo"), root_path %>
+  </div>
 
-
-<nav style="display: flex; justify-content: space-between; align-items: center; background: #ffd2bd; padding: 0 24px; border-bottom: 2px solid #000; font-family: Arial,sans-serif;">
-  <% if current_user.centro? %>
-    <div style="display: flex; flex-grow: 1; gap: 24px; align-items: center">
-      <%= [
-        ["Postulaciones", current_user ? centros_dashboard_path : root_path],
+  <div class="nav-center">
+    <% nav_items = if current_user&.centro?
+      [
+        ["Postulaciones", centros_dashboard_path],
         ["Donaciones", donaciones_path],
         ["Solicitudes", solicitudes_path],
-        ["Donantes", donantes_path],
-        ["Mi perfil", current_user.rol == "centro" ? centros_perfil_path : mi_perfil_path]
-      ].map do |label, path|
-        is_active = current_page?(path)
-        border_color = is_active ? "#c00000" : "transparent"
-        text_color   = is_active ? "#c00000" : "#000"
-
-        link_to label, path,
-          style: "padding: 12px 20px; font-weight: 500; text-decoration: none; color: #{text_color}; border-bottom: 3px solid #{border_color}; transition: all 0.2s ease-in-out;",
-          onmouseover: "this.style.borderBottom='3px solid #c00000'; this.style.color='#c00000'",
-          onmouseout:  "this.style.borderBottom='3px solid #{border_color}'; this.style.color='#{text_color}'"
-      end.join.html_safe %>
-    </div>
-  <% else %>
-    <div style="display: flex; flex-grow: 1; gap: 24px; align-items: center">
-      <%= [
-        # Usa el dashboard real como “inicio” del usuario logueado;
-        # para invitados seguiría siendo root_path.
-        ["INICIO", current_user ? users_dashboard_path : root_path],
+        ["Donantes", donantes_path]
+      ]
+    else
+      [
+        ["Inicio", users_dashboard_path],
         ["Información y requisitos", informacion_path],
-        ["Solicitudes", solicitudes_path],
-        ["Mi perfil", mi_perfil_path]
-      ].map do |label, path|
-        is_active   = current_page?(path)
-        normal_col  = "#000"
-        active_col  = "#c00000"
-        link_style  = "
-          padding: 12px 20px;
-          font-weight: 500;
-          text-decoration: none;
-          color: #{is_active ? active_col : normal_col};
-          border-bottom: 3px solid #{is_active ? active_col : 'transparent'};
-          transition: all 0.2s ease-in-out;
-        "
+        ["Solicitudes", solicitudes_path]
+      ]
+    end %>
 
-        link_to label, path,
-                style: link_style,
-                onmouseover: "this.style.color='#{active_col}'",
-                onmouseout:  "if(!#{is_active}) this.style.color='#{normal_col}'"
-      end.join.html_safe %>
-    </div>
-  <% end %>
+    <% nav_items.each do |label, path| %>
+      <% active = current_page?(path) %>
+      <%= link_to label, path, class: "nav-link #{'active' if active}" %>
+    <% end %>
+  </div>
 
-  <div>
-    <%= button_to destroy_user_session_path, method: :delete,
-        style: "background: #c00000; color: #ffffff; font-weight: bold; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; transition: all 0.2s ease-in-out;",
-        onmouseover: "this.style.background='#a00000'" ,
-        onmouseout: "this.style.background='#c00000'" ,
-        data: { turbo: false, confirm: '¿Está seguro de que quiere cerrar sesión?' } do %>
-      Cerrar sesión
+  <div class="nav-right">
+    <% if current_user %>
+      <div class="nav-profile-wrapper">
+        <% avatar_active = ["users", "centros"].include?(controller_name) %>
+
+        <div class="nav-avatar <%= 'active' if avatar_active || current_page?(mi_perfil_path) || current_page?(centros_perfil_path) %>" id="avatarDropdownToggle">
+          <% if current_user.avatar.attached? %>
+            <%= image_tag current_user.avatar, class: "avatar-img" %>
+          <% else %>
+            <%= image_tag "default-avatar.png", class: "avatar-img" %>
+          <% end %>
+        </div>
+
+        <!-- Dropdown: ID exacto -->
+        <div class="nav-dropdown" id="avatarDropdown">
+          <%= link_to "Mi perfil",
+            (current_user.rol == "centro" ? centros_perfil_path : mi_perfil_path),
+            class: "dropdown-item" %>
+
+          <%= button_to destroy_user_session_path, method: :delete,
+                data: { turbo: false, confirm: "¿Está seguro de que quiere cerrar sesión?" },
+                class: "dropdown-item dropdown-logout" do %>
+            Cerrar sesión
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <%= link_to "Ingresar", new_user_session_path, class: "nav-link login-link" %>
     <% end %>
   </div>
 </nav>
