@@ -1,0 +1,218 @@
+.home-container {
+  max-width: 1300px;
+  margin: 40px auto;
+  padding: 0 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px 40px 20px; /* mismo margen que tenía el H1 */
+}
+
+/* Título */
+.home-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  margin: 0; /* quitar márgenes para que se alinee perfecto */
+}
+
+/* Buscador */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px; /* espacio desde el borde izquierdo */
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 320px;
+  padding: 12px 20px 12px 40px; /* arriba, derecha, abajo, izquierda */
+  border: none;
+  border-radius: 25px;
+  background: #f1f1f1;
+  font-size: 15px;
+}
+
+/* Grid */
+/* .locations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+} */
+
+.locations-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 45px;
+  justify-content: center;
+}
+
+.locations-grid > * {
+  flex: 0 1 280px; /* ancho base 280px, flexible hasta llenar la fila */
+}
+
+/* CARD */
+.location-card {
+  margin: 0;
+  flex: 0 1 280px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.location-card:hover {
+  transform: translateY(-5px);
+}
+
+/* IMAGEN */
+.location-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.location-image {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+
+/* BOTÓN DONAR */
+.donar-btn {
+  transition: background 0.18s ease, color 0.18s ease;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; /* espacio entre ícono y texto */
+  margin-top: 15px;
+}
+
+.donar-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.donar-btn:hover {
+  background: #c62828;
+  color: #fff;
+  text-decoration: none;
+}
+
+.donar-btn svg {
+  fill: currentColor;
+}
+
+/* CUERPO */
+.card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-body h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0; /* reduce el espacio con la imagen */
+  margin-bottom: 2px; /* reduce el espacio con el botón */
+}
+
+/* BOTÓN DETALLES */
+.details-btn {
+  position: absolute;
+  top: 50%; /* centro vertical */
+  left: 50%; /* centro horizontal */
+  transform: translate(-50%, -50%);
+  width: 260px;
+  height: 35px;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 700;
+  border: none; /* sin borde */
+  border-radius: 49px;
+  font-size: 1rem;
+  display: flex; /* mantiene coherencia visual */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none !important;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease;
+  z-index: 5;
+}
+
+.location-card:hover .details-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.details-btn:hover {
+  background: #e0e0e0; /* gris más oscuro que #f0f0f0 */
+  color: #000;
+}
+
+.details-btn.small-text {
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  width: auto;
+  height: auto;
+}
+
+/* ALERTA */
+.alert-msg {
+  margin-top: 10px;
+  color: #c62828;
+  font-size: 14px;
+}
+
+/* IMAGEN */
+.location-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.25s ease;
+}
+
+.location-card:hover .location-image {
+  opacity: 0.55;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hidden {
+  display: none;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}

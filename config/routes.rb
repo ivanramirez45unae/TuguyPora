@@ -17,6 +17,13 @@ Rails.application.routes.draw do
   resources :postulaciones, only: [ :new, :create ] do
     resources :donaciones, only: [ :new, :create ]
   end
+  # config/routes.rb
+  resources :ubicaciones do
+    collection do
+      get :search
+    end
+  end
+
 
 resources :donaciones, only: [ :show ]
 

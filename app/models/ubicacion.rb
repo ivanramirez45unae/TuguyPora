@@ -6,4 +6,6 @@ class Ubicacion < ApplicationRecord
   has_many :postulaciones
   belongs_to :user
   has_many :horarios
+
+  scope :activas, -> { where(activo: true) }
 end

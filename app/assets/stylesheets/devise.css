@@ -34,6 +34,17 @@
   height: auto;
 }
 
+/* Animación */
+.btn-primary {
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+/* Hover */
+.btn-primary:hover {
+  background: #c62828;
+  color: #fff;
+}
+
 .login-wrapper,
 .login-card,
 .input-field,
@@ -94,6 +105,16 @@
   font-weight: 700;
   color: #333;
   text-align: center;
+}
+
+.header-inline {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espacio entre flecha y título */
+}
+
+.header-inline h1 {
+  margin: 20; /* Quita separación extra */
 }
 
 .input-group {

@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_many :solicitudes
   has_many :postulaciones
   has_one :ubicacion
-  has_one_attached :avatar
+  # has_one_attached :avatar
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable

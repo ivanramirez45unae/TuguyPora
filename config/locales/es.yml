@@ -78,4 +78,6 @@ es:
       unauthenticated: ""
     passwords:
       send_instructions: "Se enviaron las instrucciones a tu correo electrónico"
+    registrations:
+      signed_up: "Registro completado exitosamente."
 

@@ -1,86 +1,55 @@
 <%= render 'shared/navbar' %>
 
-<div style="max-width: 1200px; margin: 40px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; padding: 0 15px;">
-  <h1 style="text-align: center; color: #37474F; margin-bottom: 40px; font-size: 28px; font-weight: 600;">
-    Puntos de Donación
-  </h1>
+<div class="home-container">
+  <div class="home-header">
+    <h1>Puntos de donación</h1>
 
-  <div style="
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-  ">
-    <% @ubicaciones.each do |u| %>
-      <div style="
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        padding: 20px;
-        transition: transform 0.2s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 200px;
-      ">
-        <h3 style="font-size: 18px; color: #37474F; font-weight: 600; margin-bottom: 10px;">
-          <%= u.nombre %>
-        </h3>
+    <div class="search-container">
+      <div class="search-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-search search-icon" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
 
-        <!-- Botón de desplegar -->
-        <button onclick="toggleInfo(<%= u.id %>)"
-                style="background: none; border: none; color: #b71c1c;
-                       font-weight: 600; cursor: pointer; text-align: left;
-                       padding: 0; font-size: 15px; display: flex; align-items: center; gap: 6px;">
-          <span id="icon-<%= u.id %>">➕</span> Ver detalles
-        </button>
+        <input type="text" placeholder="Buscar punto de donación"
+               class="search-input" id="search-ubicacion">
+      </div>
+    </div>
+  </div>
 
-        <!-- Contenido oculto -->
-        <div id="info-<%= u.id %>" style="display: none; font-size: 14px; line-height: 1.6; margin-top: 15px;">
-          <p style="margin: 4px 0;"><strong>📍 Dirección:</strong> <%= u.direccion %></p>
-          <p style="margin: 4px 0;"><strong>📞 Teléfono:</strong> <%= u.num_telefono %></p>
-          <p style="margin: 6px 0 2px;"><strong>🕐 Horario:</strong></p>
-          <ul style="margin-left: 20px; padding-left: 0; list-style: disc;">
-            <% u.horarios.includes(:dia).order('dia_id ASC').each do |horario| %>
-              <li style="margin-bottom: 3px;">
-                <strong><%= horario.dia.nombre %>:</strong>
-                <%= horario.abre_a.strftime("%H:%M") %> - <%= horario.cierra_a.strftime("%H:%M") %>
-              </li>
-            <% end %>
-          </ul>
+  <div class="locations-grid">
+    <% @ubicaciones.where(activo: true).each do |u| %>
+      <div class="location-card">
+
+        <div class="location-image-wrapper">
+          <%= image_tag(u.imagen.present? ? u.imagen : "placeholder.jpg",
+                        class: "location-image") %>
+          <%= link_to "Ver detalles", "#", class: "details-btn small-text" %>
         </div>
 
-        <!-- Botón de acción -->
-        <div style="margin-top: auto;">
-          <% if current_user.donante %>
-            <%= link_to '❤️ Donar ahora',
-                new_postulacion_path(ubicacion_id: u.id),
-                style: 'display: inline-block; width: 100%; padding: 10px 0;
-                        background: #b71c1c; color: #fff; text-align: center;
-                        border: none; border-radius: 8px; font-weight: 600;
-                        font-size: 15px; text-decoration: none;
-                        transition: background 0.3s ease, transform 0.2s ease;',
-                onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
-                onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
-          <% else %>
-            <%= link_to 'Registrate como donante',
-                new_donante_path,
-                class: 'btn btn-warning',
-                style: 'width: 100%; margin-top: 10px;' %>
-            <p style="color: #c62828; font-size: 13px; margin-top: 8px;">⚠️ Debes registrarte como donante antes de poder donar.</p>
+        <div class="card-body">
+          <h3><%= u.nombre %></h3>
+
+          <% if current_user&.donante %>
+            <%= link_to new_postulacion_path(ubicacion_id: u.id),
+                        class: "donar-btn btn-primary btn-small-text" do %>
+              <span class="donar-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-droplet-fill"
+                     viewBox="0 0 16 16">
+                  <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
+                </svg>
+                <span>Donar</span>
+              </span>
+            <% end %>
+          <% end %>
+
+          <% unless current_user&.donante %>
+            <p class="alert-msg">⚠️ Debes registrarte como donante.</p>
           <% end %>
         </div>
+
       </div>
     <% end %>
   </div>
 </div>
-
-<script>
-  function toggleInfo(id) {
-    const info = document.getElementById(`info-${id}`);
-    const icon = document.getElementById(`icon-${id}`);
-    const visible = info.style.display === 'block';
-
-    info.style.display = visible ? 'none' : 'block';
-    icon.textContent = visible ? '➕' : '➖';
-  }
-</script>

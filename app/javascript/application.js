@@ -1,6 +1,6 @@
-import Rails from "@rails/ujs";
-import "./avatar_dropdown";
-Rails.start();
+import "avatar_dropdown";
+import "controllers";
+import "@hotwired/turbo-rails";
 
 document.addEventListener("DOMContentLoaded", () => {
   const toggles = document.querySelectorAll(".toggle-password");
