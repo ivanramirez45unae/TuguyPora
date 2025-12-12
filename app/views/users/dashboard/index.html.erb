@@ -53,3 +53,28 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Buscamos la barra de búsqueda y todas las tarjetas
+    const searchInput = document.getElementById('search-ubicacion');
+    const cards = document.querySelectorAll('.location-card');
+
+    // 2. Escuchamos cuando escribes
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+
+      cards.forEach((card) => {
+        // 3. Buscamos el título (h3) dentro de cada tarjeta
+        const title = card.querySelector('h3').textContent.toLowerCase();
+
+        // 4. Si el título incluye lo que escribiste, se muestra. Si no, se oculta.
+        if (title.includes(searchTerm)) {
+          card.style.display = ''; // Vuelve a su estado original (visible)
+        } else {
+          card.style.display = 'none'; // Se oculta
+        }
+      });
+    });
+  });
+</script>
