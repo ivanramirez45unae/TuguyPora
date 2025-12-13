@@ -12,15 +12,15 @@
         </svg>
 
         <input type="text" placeholder="Buscar punto de donación"
-               class="search-input" id="search-ubicacion">
+               class="search-input" id="search-ubicacion" autocomplete="off">
       </div>
     </div>
   </div>
 
-  <div class="locations-grid">
+  <!-- Contenedor de la cuadrícula -->
+  <div class="locations-grid" id="grid-container">
     <% @ubicaciones.where(activo: true).each do |u| %>
       <div class="location-card">
-
         <div class="location-image-wrapper">
           <%= image_tag(u.imagen.present? ? u.imagen : "placeholder.jpg",
                         class: "location-image") %>
@@ -48,33 +48,103 @@
             <p class="alert-msg">⚠️ Debes registrarte como donante.</p>
           <% end %>
         </div>
-
       </div>
     <% end %>
   </div>
+
+  <!-- Mensaje de "No resultados" (oculto por defecto) -->
+  <div id="no-results" class="no-results-container" style="display: none;">
+    <div class="empty-state">
+      <p>No encontramos ninguna ubicación con ese nombre.</p>
+      <button id="clear-search" class="btn-clean">Ver todas</button>
+    </div>
+  </div>
 </div>
+
+<!-- ESTILOS EXTRA para la animación y el mensaje -->
+<style>
+  /* Animación: Corta y sutil */
+  @keyframes fadeInCard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .location-card {
+    /* Mantiene la transición suave si algo cambia de tamaño */
+    transition: all 0.2s ease;
+  }
+
+  .animate-appear {
+    /* 0.3s es lo suficientemente rápido para no sentirse lento */
+    animation: fadeInCard 0.3s ease-out forwards;
+  }
+
+  /* El resto de tus estilos del mensaje de error... */
+  .no-results-container {
+    text-align: center;
+    padding: 40px 20px;
+    width: 100%;
+  }
+  .empty-state p { font-size: 1.1rem; color: #666; margin-bottom: 10px; }
+  .btn-clean { background: none; border: none; color: #121314ff; text-decoration: underline; cursor: pointer; }
+</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Buscamos la barra de búsqueda y todas las tarjetas
     const searchInput = document.getElementById('search-ubicacion');
     const cards = document.querySelectorAll('.location-card');
+    const noResults = document.getElementById('no-results');
+    const clearBtn = document.getElementById('clear-search');
 
-    // 2. Escuchamos cuando escribes
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
+    const filterCards = (searchTerm) => {
+      let visibleCount = 0;
 
       cards.forEach((card) => {
-        // 3. Buscamos el título (h3) dentro de cada tarjeta
         const title = card.querySelector('h3').textContent.toLowerCase();
+        const isMatch = title.includes(searchTerm);
+        
+        // Verificamos si la tarjeta está actualmente oculta o visible
+        const isHidden = card.style.display === 'none';
 
-        // 4. Si el título incluye lo que escribiste, se muestra. Si no, se oculta.
-        if (title.includes(searchTerm)) {
-          card.style.display = ''; // Vuelve a su estado original (visible)
+        if (isMatch) {
+          // CASO 1: Coincide y estaba oculta -> LA MOSTRAMOS Y ANIMAMOS
+          if (isHidden) {
+            card.style.display = ''; 
+            card.classList.remove('animate-appear');
+            void card.offsetWidth; // Reinicia la animación
+            card.classList.add('animate-appear');
+          }
+          // CASO 2: Coincide y ya estaba visible -> NO HACEMOS NADA (así no parpadea)
+          
+          visibleCount++;
         } else {
-          card.style.display = 'none'; // Se oculta
+          // CASO 3: No coincide -> OCULTAR
+          card.style.display = 'none';
         }
       });
+
+      // Lógica del mensaje "No resultados"
+      if (visibleCount === 0) {
+        if (noResults.style.display === 'none') {
+            noResults.style.display = 'block';
+            noResults.classList.remove('animate-appear');
+            void noResults.offsetWidth;
+            noResults.classList.add('animate-appear');
+        }
+      } else {
+        noResults.style.display = 'none';
+      }
+    };
+
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      filterCards(term);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      filterCards('');
+      searchInput.focus();
     });
   });
 </script>
