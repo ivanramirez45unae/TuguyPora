@@ -22,10 +22,27 @@
     <% @ubicaciones.where(activo: true).each do |u| %>
       <div class="location-card">
         <div class="location-image-wrapper">
-          <%= image_tag(u.imagen.present? ? u.imagen : "placeholder.jpg",
-                        class: "location-image") %>
-          <%= link_to "Ver detalles", "#", class: "details-btn small-text" %>
-        </div>
+        <%= image_tag(u.imagen.present? ? u.imagen : "placeholder.jpg", class: "location-image") %>
+        <% 
+          datos_horarios = u.horarios.joins(:dia).order('dias.id').map { |h| 
+            { 
+              dia: h.dia.nombre, 
+              horas: "#{h.abre_a.strftime('%H:%M')} - #{h.cierra_a.strftime('%H:%M')}" 
+            } 
+          }.to_json
+        %>
+        <%= link_to "Ver detalles", "#", 
+          class: "details-btn small-text", 
+          data: { 
+            nombre: u.nombre,
+            direccion: u.direccion,
+            telefono: u.num_telefono,
+            imagen: (u.imagen.present? ? asset_path(u.imagen) : asset_path("placeholder.jpg")),
+            url_donar: new_postulacion_path(ubicacion_id: u.id),
+            horarios: datos_horarios 
+          } 
+        %>
+      </div>
 
         <div class="card-body">
           <h3><%= u.nombre %></h3>
@@ -45,7 +62,7 @@
           <% end %>
 
           <% unless current_user&.donante %>
-            <p class="alert-msg">⚠️ Debes registrarte como donante.</p>
+            <p class="alert-msg">Debes registrarte como donante.</p>
           <% end %>
         </div>
       </div>
@@ -89,62 +106,181 @@
   .btn-clean { background: none; border: none; color: #121314ff; text-decoration: underline; cursor: pointer; }
 </style>
 
+  <!-- La ventana Modal -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      
+      <div class="modal-layout">
+        <!-- COLUMNA IZQUIERDA: Imagen -->
+        <div class="modal-image-col">
+          <img id="modal-img" src="" alt="Foto del lugar">
+        </div>
+        
+        <!-- COLUMNA DERECHA: Información -->
+        <div class="modal-info-col">
+          <h2 id="modal-title" class="modal-title"></h2>
+          
+          <!-- Horario (Como no está en tu DB, lo he dejado estático o podrías agregarlo a tu modelo) -->
+          <div class="info-block">
+            <h3 class="info-label">Horario de atención</h3>
+            <!-- Contenedor vacío donde JS pondrá los datos -->
+            <div id="modal-horarios-list" class="info-text">
+                <!-- Aquí se generarán las líneas dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="info-block">
+            <h3 class="info-label">Dirección</h3>
+            <p id="modal-direccion" class="info-text"></p>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="info-block">
+            <h3 class="info-label">Teléfono</h3>
+            <p id="modal-telefono" class="info-text"></p>
+          </div>
+
+          <!-- Botón de acción -->
+          <div class="modal-actions">
+              <a href="#" id="modal-btn-donar" class="donar-btn btn-primary btn-small-text">
+                  <span class="donar-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                          fill="currentColor" class="bi bi-droplet-fill"
+                          viewBox="0 0 16 16">
+                        <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
+                      </svg>
+                      <span>Donar</span>
+                  </span>
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    
+    // ==========================================
+    // 1. BARRA DE BÚSQUEDA
+    // ==========================================
     const searchInput = document.getElementById('search-ubicacion');
     const cards = document.querySelectorAll('.location-card');
     const noResults = document.getElementById('no-results');
     const clearBtn = document.getElementById('clear-search');
 
-    const filterCards = (searchTerm) => {
-      let visibleCount = 0;
+    if (searchInput) {
+      const filterCards = (searchTerm) => {
+        let visibleCount = 0;
+        cards.forEach((card) => {
+          const title = card.querySelector('h3').textContent.toLowerCase();
+          const isMatch = title.includes(searchTerm);
+          const isHidden = card.style.display === 'none';
 
-      cards.forEach((card) => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        const isMatch = title.includes(searchTerm);
-        
-        // Verificamos si la tarjeta está actualmente oculta o visible
-        const isHidden = card.style.display === 'none';
-
-        if (isMatch) {
-          // CASO 1: Coincide y estaba oculta -> LA MOSTRAMOS Y ANIMAMOS
-          if (isHidden) {
-            card.style.display = ''; 
-            card.classList.remove('animate-appear');
-            void card.offsetWidth; // Reinicia la animación
-            card.classList.add('animate-appear');
+          if (isMatch) {
+            if (isHidden) {
+              card.style.display = ''; 
+              card.classList.remove('animate-appear');
+              void card.offsetWidth; 
+              card.classList.add('animate-appear');
+            }
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
           }
-          // CASO 2: Coincide y ya estaba visible -> NO HACEMOS NADA (así no parpadea)
-          
-          visibleCount++;
+        });
+
+        if (visibleCount === 0) {
+          if (noResults.style.display === 'none') {
+              noResults.style.display = 'block';
+              noResults.classList.remove('animate-appear');
+              void noResults.offsetWidth;
+              noResults.classList.add('animate-appear');
+          }
         } else {
-          // CASO 3: No coincide -> OCULTAR
-          card.style.display = 'none';
+          noResults.style.display = 'none';
         }
+      };
+
+      searchInput.addEventListener('input', (e) => {
+        filterCards(e.target.value.toLowerCase().trim());
       });
 
-      // Lógica del mensaje "No resultados"
-      if (visibleCount === 0) {
-        if (noResults.style.display === 'none') {
-            noResults.style.display = 'block';
-            noResults.classList.remove('animate-appear');
-            void noResults.offsetWidth;
-            noResults.classList.add('animate-appear');
-        }
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterCards('');
+        searchInput.focus();
+      });
+    }
+
+    // ==========================================
+    // 2. VENTANA MODAL
+    // ==========================================
+    
+    const modal = document.getElementById('modal-overlay');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDir = document.getElementById('modal-direccion');
+    const modalTel = document.getElementById('modal-telefono');
+    const modalBtnDonar = document.getElementById('modal-btn-donar');
+    const listaHorarios = document.getElementById('modal-horarios-list');
+
+    // Función para abrir modal
+    const openModal = (data) => {
+      modalImg.src = data.imagen;
+      modalTitle.textContent = data.nombre;
+      modalDir.textContent = data.direccion;
+      modalTel.textContent = data.num_telefono;
+      
+      if (modalBtnDonar) modalBtnDonar.href = data.url_donar;
+
+      // Renderizar Horarios
+      listaHorarios.innerHTML = ''; 
+      if (data.horarios && data.horarios.length > 0) {
+        data.horarios.forEach(h => {
+          const p = document.createElement('p');
+          p.style.margin = "0 0 5px 0";
+          p.innerHTML = `<span class="underline">${h.dia}:</span> ${h.horas} hs.`;
+          listaHorarios.appendChild(p);
+        });
       } else {
-        noResults.style.display = 'none';
+        listaHorarios.innerHTML = '<p>No hay horarios registrados.</p>';
       }
+
+      modal.classList.add('active');
     };
 
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      filterCards(term);
+    // Función para cerrar modal
+    const closeModal = () => {
+      modal.classList.remove('active');
+    };
+
+    // Exponer closeModal al objeto window por si usas onclick="closeModal()" en el HTML
+    window.closeModal = closeModal; 
+
+    // Listeners botones "Ver detalles"
+    document.querySelectorAll('.details-btn').forEach(boton => {
+      boton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const datos = {
+          nombre: this.dataset.nombre,
+          direccion: this.dataset.direccion,
+          num_telefono: this.dataset.telefono,
+          imagen: this.dataset.imagen,
+          url_donar: this.dataset.urlDonar,
+          horarios: JSON.parse(this.dataset.horarios || "[]") 
+        };
+        openModal(datos);
+      });
     });
 
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      filterCards('');
-      searchInput.focus();
-    });
+    // Cerrar click afuera
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+    }
   });
 </script>
