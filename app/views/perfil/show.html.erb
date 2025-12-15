@@ -1,206 +1,271 @@
 <%= render 'shared/navbar' %>
 
-<div class="perfil-container" style="max-width: 900px; margin: 30px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
-
-<div class="perfil-top" style="display: flex; align-items: center; gap: 30px; background: #fafafa; padding: 20px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
-
-  <!-- Foto de perfil a la izquierda -->
-  <div class="foto" style="flex-shrink: 0">
-    <div class="foto-placeholder" style="width: 130px; height: 130px; border-radius: 50%; background: #ddd; box-shadow: inset 0 0 8px #bbb;"></div>
-    <em style="display: block; margin-top: 15px; font-size: 28px; font-weight: 600; color: #333;"><%= @user.nombre %></em>
-
-    <% unless @donante %>
-      <div style="margin-top: 15px">
-        <%= link_to 'Regístrate como donante', new_donante_path, 
-            style: 'background-color: #c00000; color: #ffffff; padding: 12px 30px; border-radius: 6px; font-weight: 600; text-decoration: none; transition: background-color 0.3s ease;', 
-            onmouseover: "this.style.backgroundColor='#8B1E3F'", 
-            onmouseout: "this.style.backgroundColor='#c00000'" %>
-        </div>
-    <% end %>
-  </div>
-
-  <!-- Tipo de sangre y Donaciones a la derecha -->
-  <div class="info" style="flex-grow: 1;">
-    <!-- Tipo sanguíneo -->
-    <div style="padding: 10px; background: #8B1E3F; color: #ffffff; border-radius: 8px; font-weight: 700; margin-bottom: 20px; text-align: center;">
-      <div style="font-size: 36px; line-height: 1;"><%= @donante ? @donante.tipo_sanguineo : "❌" %></div>
-      <div style="font-size: 14px; margin-top: 6px; font-weight: 500;">Tipo sanguíneo</div>
-    </div>
-
-    <!-- Donaciones -->
-    <div style="padding: 20px; background: #6A4E42; color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px #0003; text-align: center;">
-      <div style="font-size: 36px; font-weight: 800; margin-bottom: 8px;"><%= @donante ? @donaciones_count : "❌" %></div>
-
-      <% if @donante %>
-        <div style="font-size: 16px; font-weight: 500; color: #FFD9B3; margin-bottom: 12px;">
-          <%= @donaciones_count == 1 ? "Donación realizada" : "Donaciones realizadas" %>
-        </div>
-
-        <% if @donante.ult_donacion_fecha.present? %>
-          <% meses_espera = @donante.user.genero == "Femenino" ? 4 : 3 %>
-          <% fecha_prox = @donante.ult_donacion_fecha.advance(months: meses_espera) %>
-          <% meses_falt = fecha_prox.month - Date.today.month + (12 * (fecha_prox.year - Date.today.year)) %>
-
-          <div style="font-size: 14px; color: #FFD9B3; font-weight: 500; margin-top: 10px;">
-            Podés volver a donar a partir de <strong><%= l(fecha_prox, format: :long) %></strong>.<br>
-            (Dentro de <%= meses_falt %> <%= meses_falt == 1 ? "mes" : "meses" %>)
-          </div>
-        <% else %>
-          <div style="font-size: 14px; color: #FFD9B3; font-weight: 500; margin-top: 10px;">
-            Aún no has realizado ninguna donación.
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-
-
-</div>
-
-  <!-- Datos básicos -->
-  <div class="perfil-datos" style="background: #fff; padding: 25px 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 30px; line-height: 1.6; font-size: 16px;">
-    <p>📱 <strong>Teléfono:</strong> <%= @user.num_telefono %></p>
-    <p>🎂 <strong>Nacimiento:</strong> <%= @user.fec_nacimiento.strftime("%d/%m/%Y") if @user.fec_nacimiento %></p>
-    <p>📍 <strong>Dirección:</strong> <%= @user.direccion %></p>
-    <p>🧬 <strong>Género:</strong> <%= @user.genero %></p>
-  </div>
-
-  <!-- Botones de sección -->
-  <div class="perfil-tabs" style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
-    <button class="tab-button active" data-target="ficha" 
-      style="flex: 1; max-width: 220px; padding: 12px 0; background: #8B1E3F; color: white; font-weight: 700; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
-      Ficha médica
-    </button>
-    <button class="tab-button" data-target="donaciones" 
-      style="flex: 1; max-width: 220px; padding: 12px 0; background: #eee; color: #444; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
-      Historial de donaciones
-    </button>
-    <button class="tab-button" data-target="postulaciones" 
-      style="flex: 1; max-width: 220px; padding: 12px 0; background: #eee; color: #444; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease;">
-      Postulaciones
-    </button>
-  </div>
-
- <!-- Contenido dinámico -->
-<div class="perfil-content" style="background: white; padding: 25px 30px; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.06); min-height: 180px;">
-
-  <!-- Ficha del Donante -->
-  <div id="ficha" class="tab-content active" style="animation: fadeIn 0.3s ease;">
-    <% if @donante %>
-      <h3 style="color: #8B1E3F; margin-bottom: 20px;">🩸 Información como Donante</h3>
-      <p>⚖️ <strong>Peso:</strong> <%= @donante.peso_kg %> kg</p>
-      <p>📏 <strong>Estatura:</strong> <%= @donante.estatura_cm %> cm</p>
-      <p>🧷 <strong>¿Tatuajes?:</strong> <%= @donante.tiene_tatuajes ? 'Sí' : 'No' %></p>
-      <p>🕒 <strong>Última donación:</strong> <%= @donante.ult_donacion_fecha.strftime("%d/%m/%Y") if @donante.ult_donacion_fecha %></p>
-      <p>✔️ <strong>Verificado:</strong> <%= @donante.ult_donacion_verificado ? 'Sí' : 'No' %></p>
-
-      <h4 style="margin-top: 20px; color: #8B1E3F;">📋 Condiciones Crónicas</h4>
-      <% if @donante.condiciones_cronicas.any? %>
-        <ul style="text-align: left; padding-left: 16px; margin: 0;">
-          <% @donante.condiciones_cronicas.each do |cond| %>
-            <li><%= cond.nombre %></li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p style="color: #888;">Ninguna</p>
-      <% end %>
-
-      <h4 style="margin-top: 20px; color: #8B1E3F;">💊 Medicamentos</h4>
-      <% if @donante.medicamentos.any? %>
-        <ul style="text-align: left; padding-left: 16px; margin: 0;">
-          <% @donante.medicamentos.each do |med| %>
-            <li><%= med.nombre %></li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p style="color: #888;">Ninguno</p>
-      <% end %>
-
-    <% else %>
-      <p style="color: #c00000; font-weight: 600;">❗ No se encontró información como donante.</p>
-    <% end %>
-  </div>
-
-  <!-- Donaciones -->
-  <div id="donaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
-    <% if @donaciones.any? %>
-      <% @donaciones.each_with_index.reverse_each do |d, i| %>
-        <div style="border: 2px solid #8B1E3F; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #fdf3f6;">
-          <h4 style="color: #8B1E3F; margin-bottom: 10px;">🩸 Donación Nº <%= i + 1 %></h4>
-          <p><strong>Fecha:</strong> <%= d.fecha_donacion.strftime("%d/%m/%Y") %></p>
-          <p><strong>Volumen:</strong> <%= d.volumen_ml %> ml</p>
-          <p><strong>Tipo de sangre:</strong> <%= d.tipo_sangre %></p>
-          <p><strong>Ubicación:</strong> <%= d.ubicacion&.nombre || "No especificada" %></p>
-          <p><strong>Nº de postulación:</strong> <%= d.postulacion_id %></p>
-          <p><strong>Tipo de donación:</strong>
-            <%= d.solicitud.present? ? "Por reposición (Para #{d.solicitud.nombre_paciente})" : "Voluntaria" %>
-          </p>
-          <p>✔️ <strong>Verificada por centro ID:</strong> <%= d.verificado_por_usuario || "No verificado" %></p>
-        </div>
-      <% end %>
-    <% else %>
-      <p style="color: #777;">No hay donaciones registradas.</p>
-    <% end %>
-  </div>
-
-<!-- Postulaciones -->
-<div id="postulaciones" class="tab-content" style="display: none; animation: fadeIn 0.3s ease;">
-  <% pendientes = @postulaciones.select { |p| p.estado == "P" } %>
-  
-  <% if pendientes.any? %>
-    <% pendientes.each_with_index.reverse_each do |p, i| %>
-      <% fondo  = "#FFEDED" %>
-      <% borde  = "#dc3545" %>
-      <% texto  = "Pendiente" %>
-      <% estilo = '' %>
-
-      <div style="margin-bottom: 20px; padding: 15px; border: 2px solid <%= borde %>; border-radius: 8px; background-color: <%= fondo %>; <%= estilo %>">
-        <h4 style="margin-top:0; color:<%= borde %>;">📝 Postulación Nº <%= i + 1 %> — <%= texto %></h4>
-
-        <p>🗓️ <strong>Fecha tentativa:</strong> <%= p.fecha_tentativa&.strftime("%d/%m/%Y") || "—" %></p>
-        <p>🕒 <strong>Hora tentativa:</strong> <%= p.hora_tentativa&.strftime("%H:%M") || "—" %></p>
-        <p>🏥 <strong>Ubicación:</strong> <%= p.ubicacion&.nombre || "No especificada" %></p>
-
-        <p>📄 <strong>Tipo de postulación:</strong>
-          <% if p.solicitud %>
-            Por reposición (Solicitud #<%= p.solicitud.id %>)
+<div class="tuguy-profile-container">
+  <div class="profile-card">
+    
+    <!-- CONTENEDOR FLEX: FOTO IZQ | INFO DER -->
+    <div class="header-layout">
+      
+      <!-- 1. FOTO (IZQUIERDA) -->
+      <div class="avatar-column">
+        <div class="avatar-circle">
+          <% if @user.respond_to?(:avatar) && @user.avatar.attached? %>
+            <!-- Si tienes ActiveStorage configurado -->
+            <%= image_tag @user.avatar, style: "width:100%; height:100%; object-fit:cover;" %>
           <% else %>
-            Voluntaria
+            <!-- FALLBACK SVG: Silueta de hombre moderna (Estilo Figma) -->
+            <svg viewBox="0 0 24 24" fill="#333" xmlns="http://www.w3.org/2000/svg">
+              <rect width="24" height="24" fill="#EEEEEE"/>
+              <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#555"/>
+            </svg>
           <% end %>
-        </p>
+        </div>
+      </div>
+
+      <!-- 2. INFO (DERECHA: Nombre arriba, Stats abajo) -->
+      <div class="info-column">
+        
+        <!-- Nombre y Lápiz -->
+        <div class="user-header">
+          <h1 class="user-name"><%= @user.nombre %></h1>
+          <!-- Icono Lápiz -->
+          <svg style="width:18px; height:18px; cursor:pointer; opacity:0.6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </div>
+
+        <!-- Estadísticas INTERACTIVAS (Justo debajo del nombre) -->
+        <div class="stats-nav">
+          
+          <!-- Botón Tipo Sangre -->
+          <div class="stat-btn active" onclick="switchSection('ficha', this)">
+            <div class="stat-value"><%= @donante ? @donante.tipo_sanguineo : "--" %></div>
+            <div class="stat-label">Tipo sanguíneo</div>
+          </div>
+
+          <!-- Botón Donaciones -->
+          <div class="stat-btn" onclick="switchSection('donaciones', this)">
+            <div class="stat-value"><%= @donante ? @donaciones_count : "0" %></div>
+            <div class="stat-label">Donaciones</div>
+          </div>
+
+          <!-- Botón Postulaciones -->
+          <div class="stat-btn" onclick="switchSection('postulaciones', this)">
+            <div class="stat-value"><%= @postulaciones.count %></div>
+            <div class="stat-label">Postulación</div>
+          </div>
+
+        </div>
+      </div> <!-- Fin info-column -->
+
+    </div> <!-- Fin header-layout -->
+
+    <!-- 3. BARRA VERDE (Full Width abajo) -->
+    <% if @donante %>
+      <div class="status-bar">
+        ¡Estás habilitado por donar!
       </div>
     <% end %>
-  <% else %>
-    <p style="color: #6c757d;">No hay postulaciones pendientes.</p>
-  <% end %>
+
+    <!-- 4. CONTENIDO DESPLEGABLE (Abajo del todo) -->
+    
+    <!-- FICHA MÉDICA -->
+    <div id="ficha" class="content-section active" style="background: #F9F9F9; padding: 30px; border-radius: 12px;">
+    
+    <!-- === SECCIÓN 1: INFORMACIÓN BÁSICA === -->
+    <h3 class="section-header">Información básica</h3>
+    
+    <div class="info-group">
+      <div class="info-row">
+        <span class="icon-fixed">
+          <!-- Ícono Calendario -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M5.5 10.5A.5.5 0 0 1 6 10h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5"/>
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+            <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+        </span> 
+        <div><span class="label-bold">Fecha de nacimiento:</span> <%= @user.fec_nacimiento&.strftime("%d/%m/%Y") %></div>
+      </div>
+
+      <div class="info-row">
+        <span class="icon-fixed">
+          <!-- Ícono Ubicación (Pin) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411"/>
+          </svg>
+        </span> 
+        <div><span class="label-bold">Dirección:</span> <%= @user.direccion %></div>
+      </div>
+
+      <div class="info-row">
+        <span class="icon-fixed">
+          <!-- Ícono Género -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"/>
+          </svg>
+        </span> 
+        <div><span class="label-bold">Género:</span> <%= @user.genero %></div>
+      </div>
+
+      <div class="info-row">
+        <span class="icon-fixed">
+          <!-- Ícono Teléfono -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+          </svg>
+        </span> 
+        <div><span class="label-bold">Teléfono:</span> <%= @user.num_telefono %></div>
+      </div>
+    </div>
+
+    <!-- LÍNEA SEPARADORA -->
+    <div class="horizontal-divider"></div>
+
+    <!-- === SECCIÓN 2: FICHA MÉDICA === -->
+    <h3 class="section-header">Ficha médica</h3>
+    
+    <div class="medical-split-layout">
+      
+      <!-- COLUMNA IZQUIERDA (Datos físicos) -->
+      <div class="medical-col left-col">
+        
+        <!-- PESO (Scale) -->
+        <div class="info-row">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.5 21h13M12 21V7m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm2-1.8c3.073.661 2.467 2.8 5 2.8M5 8c3.359 0 2.192-2.115 5.012-2.793M7 9.556V7.75m0 1.806-1.95 4.393a.773.773 0 0 0 .37.962.785.785 0 0 0 .362.089h2.436a.785.785 0 0 0 .643-.335.776.776 0 0 0 .09-.716L7 9.556Zm10 0V7.313m0 2.243-1.95 4.393a.773.773 0 0 0 .37.962.786.786 0 0 0 .362.089h2.436a.785.785 0 0 0 .643-.335.775.775 0 0 0 .09-.716L17 9.556Z"/>
+            </svg>
+          </span> 
+          <div><span class="label-bold">Peso:</span> <%= @donante ? "#{@donante.peso_kg} kg" : "--" %></div>
+        </div>
+
+        <!-- ESTATURA (Ruler) -->
+        <div class="info-row">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M1 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5v-1H2v-1h4v-1H4v-1h2v-1H2v-1h4V9H4V8h2V7H2V6h4V2h1v4h1V4h1v2h1V2h1v4h1V4h1v2h1V2h1v4h1V1a1 1 0 0 0-1-1z"/>
+            </svg>
+          </span> 
+          <div><span class="label-bold">Estatura:</span> <%= @donante ? "#{@donante.estatura_cm} cm" : "--" %></div>
+        </div>
+
+        <!-- TATUAJES (Pen) -->
+        <div class="info-row">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+              <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+            </svg>
+          </span> 
+          <div><span class="label-bold">Tatuajes:</span> <%= @donante&.tiene_tatuajes ? 'Sí' : 'No' %></div>
+        </div>
+
+        <!-- ÚLTIMA DONACIÓN (Droplet - En rojo) -->
+        <div class="info-row" style="margin-bottom: 0;">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16" style="color: #E31C23;">
+              <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
+            </svg>
+          </span> 
+          <div class="highlight-red">Última donación: <%= @donante&.ult_donacion_fecha&.strftime("%d/%m/%Y") || "N/A" %></div>
+        </div>
+        
+        <% if @donante&.ult_donacion_verificado %>
+          <span class="verified-text">(Verificado)</span>
+        <% end %>
+      </div>
+
+      <!-- COLUMNA DERECHA (Condiciones y Medicamentos) -->
+      <div class="medical-col">
+        
+        <!-- CONDICIONES MÉDICAS (Icono Journal Medical) -->
+        <div class="info-row" style="margin-bottom: 5px;">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-journal-medical" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v.634l.549-.317a.5.5 0 1 1 .5.866L9 6l.549.317a.5.5 0 1 1-.5.866L8.5 6.866V7.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L7 6l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V4.5A.5.5 0 0 1 8 4M5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+              <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+              <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+            </svg>
+          </span> 
+          <span class="label-bold">Condiciones médicas:</span>
+        </div>
+        
+        <% if @donante && @donante.condiciones_cronicas.any? %>
+          <ul class="sub-list">
+            <% @donante.condiciones_cronicas.each do |c| %>
+              <li><%= c.nombre %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <span class="empty-text">Ninguna</span>
+        <% end %>
+
+        <!-- MEDICAMENTOS (Icono Capsule) -->
+        <div class="info-row" style="margin-top: 20px; margin-bottom: 5px;">
+          <span class="icon-fixed">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
+              <path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429z"/>
+            </svg>
+          </span> 
+          <span class="label-bold">Lista de medicamentos:</span>
+        </div>
+
+        <% if @donante && @donante.medicamentos.any? %>
+          <ul class="sub-list">
+            <% @donante.medicamentos.each do |m| %>
+              <li><%= m.nombre %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <span class="empty-text">Ninguno</span>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+
+    <!-- DONACIONES -->
+    <div id="donaciones" class="content-section">
+      <h3 style="margin-bottom:20px; color:#333;">🩸 Historial de Donaciones</h3>
+      <% if @donaciones.any? %>
+        <% @donaciones.each_with_index.reverse_each do |d, i| %>
+           <div style="padding:15px; border:1px solid #eee; margin-bottom:10px; border-radius:8px;">
+             <strong>Donación #<%= i+1 %></strong> - <%= d.fecha_donacion.strftime("%d/%m/%Y") %>
+           </div>
+        <% end %>
+      <% else %>
+         <p style="color:#777;">No hay donaciones registradas.</p>
+      <% end %>
+    </div>
+
+    <!-- POSTULACIONES -->
+    <div id="postulaciones" class="content-section">
+      <h3 style="margin-bottom:20px; color:#333;">📝 Postulaciones Pendientes</h3>
+      <% pendientes = @postulaciones.select { |p| p.estado == "P" } %>
+      <% if pendientes.any? %>
+        <% pendientes.each do |p| %>
+           <div style="background:#FFF8E1; padding:15px; margin-bottom:10px; border-radius:8px;">
+             Solicitud para el <strong><%= p.fecha_tentativa %></strong>
+           </div>
+        <% end %>
+      <% else %>
+        <p style="color:#777;">No hay postulaciones pendientes.</p>
+      <% end %>
+    </div>
+
+  </div>
 </div>
-
-
-</div>
-
 
 <script>
-  // Cambio de pestañas
-  document.querySelectorAll('.tab-button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-button').forEach(b => {
-        b.classList.remove('active');
-        b.style.backgroundColor = '#eee';
-        b.style.color = '#444';
-      });
-      btn.classList.add('active');
-      btn.style.backgroundColor = '#8B1E3F';
-      btn.style.color = 'white';
-
-      document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
-      document.getElementById(btn.getAttribute('data-target')).style.display = 'block';
-    });
-  });
-</script>
-
-<style>
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+  function switchSection(sectionId, btnElement) {
+    // Quitar active de todo
+    document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.stat-btn').forEach(el => el.classList.remove('active'));
+    
+    // Activar selección
+    document.getElementById(sectionId).classList.add('active');
+    btnElement.classList.add('active');
   }
-</style>
+</script>
