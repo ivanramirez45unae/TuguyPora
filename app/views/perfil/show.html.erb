@@ -50,19 +50,24 @@
             <div class="stat-value">
               <%= @donante.present? ? @donaciones_count : "--" %>
             </div>
-            <div class="stat-label">Donaciones</div>
+            <div class="stat-label">
+              <%# Lógica: Si es 1 es singular, de lo contrario plural %>
+              <%= @donaciones_count == 1 ? "Donación" : "Donaciones" %>
+            </div>
           </div>
 
           <!-- Botón Postulaciones -->
           <div class="stat-btn <%= 'stat-disabled' if @donante.nil? %>" 
               <% if @donante.present? %> onclick="switchSection('postulaciones', this)" <% end %>>
             <div class="stat-value">
-              <% # Filtramos las postulaciones para contar solo las que tienen estado 'P' %>
-              <%= @donante.present? ? @postulaciones.count { |p| p.estado == "P" } : "--" %>
+              <% p_count = @donante.present? ? @postulaciones.count { |p| p.estado == "P" } : 0 %>
+              <%= @donante.present? ? p_count : "--" %>
             </div>
-            <div class="stat-label">Postulaciones</div>
+            <div class="stat-label">
+              <%# Lógica: Si es 1 es singular, de lo contrario plural %>
+              <%= p_count == 1 ? "Postulación" : "Postulaciones" %>
+            </div>
           </div>
-
         </div>
       </div> <!-- Fin info-column -->
 
@@ -339,7 +344,7 @@
                 <% # Asumiendo que tienes un campo hora_tentativa, si no, usa created_at %>
                 <p>Hora tentativa: <strong><%= p.respond_to?(:hora_tentativa) ? p.hora_tentativa.strftime("%H:%M hs.") : p.created_at.strftime("%H:%M hs.") %></strong></p>
                 
-                <p>Lugar: <strong><%= p.solicitud&.ubicacion&.nombre || p.ubicacion&.nombre %></strong></p>
+                <p>Lugar de donación: <strong><%= p.ubicacion&.nombre %></strong></p>
               </div>
 
               <!-- Línea Divisoria Vertical -->

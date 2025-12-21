@@ -37,7 +37,7 @@
 
   <!-- TIPO DE SANGRE -->
   <div class="input-group">
-    <%= form.label :tipo_sangre, "Tipo de sangre requerido", class: "input-label" %>
+    <%= form.label :tipo_sangre, "Tipo de sangre del paciente", class: "input-label" %>
     <div class="input-icon-container">
       <%= form.select :tipo_sangre,
         options_for_select(["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"], @solicitud.tipo_sangre),

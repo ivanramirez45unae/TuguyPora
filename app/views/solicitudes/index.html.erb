@@ -50,7 +50,7 @@
               <span class="label-muted">En:</span>
               <p class="val-hospital-name"><%= solicitud.ubicacion.nombre %></p>
               <div style="margin-top: 18px;">
-                <span class="label-muted--blood">Tipo de sangre requerido:</span>
+                <span class="label-muted--blood">Tipo de sangre del paciente:</span>
                 <span class="val-blood-type"><%= solicitud.tipo_sangre %></span>
               </div>
             </div>
@@ -88,16 +88,28 @@
                     method: :delete, 
                     class: 'btn-solicitud-share', 
                     style: 'color: #c62828 !important; margin-top: 5px; background: none; border: 1px solid #ddd; cursor: pointer;',
-                    form: { data: { turbo_confirm: "¿Está seguro de que desea eliminar esta solicitud?" } } do %>
+                    onclick: "return confirm('¿Está seguro de que desea eliminar esta solicitud?');" do %>
                     Eliminar
                 <% end %>
 
               <% else %>
-                <%= link_to new_postulacion_path(solicitud_id: solicitud.id), class: 'btn-solicitud-donar' do %>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-droplet-fill" viewBox="0 0 16 16">
-                    <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
-                  </svg>
-                  Donar
+                <% if current_user.donante.present? %>
+                  <% # CASO 1: Es donante - Botón para ir a la postulación %>
+                  <%= link_to new_postulacion_path(solicitud_id: solicitud.id), class: 'btn-solicitud-donar' do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-droplet-fill" viewBox="0 0 16 16">
+                      <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
+                    </svg>
+                    Donar
+                  <% end %>
+                <% else %>
+                  <% # CASO 2: No es donante - Botón para registrarse (con color gris para diferenciarlo) %>
+                  <%= link_to new_donante_path, class: 'btn-solicitud-donar', style: 'background-color: #666 !important;' do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                      <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                      <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                    </svg>
+                    Registrarme como donante
+                  <% end %>
                 <% end %>
                 <!-- <a href="#" class="btn-solicitud-share">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="black"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>

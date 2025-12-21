@@ -1,60 +1,109 @@
-<h1>Registro de Donante</h1>
+<%= render 'shared/navbar' %>
+<div class="login-background"></div>
 
-<%= form_with model: @donante, local: true do |f| %>
-  <div>
-    <%= f.label :tipo_sanguineo, "Tipo Sanguíneo" %><br>
-    <%= f.select :tipo_sanguineo, 
-      ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 
-      { prompt: "Seleccione su tipo de sangre" }, 
-      required: true %>
-  </div>
+<div class="login-wrapper">
+  <div class="login-card" style="width: 500px;"> <!-- Un poco más ancho por las listas -->
+    <div class="header-inline" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 15px;">
+  <a href="<%= request.referer || root_path %>" class="back-btn" style="color: #333; display: flex; align-items: center; text-decoration: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" style="display: block;">
+      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+    </svg>
+  </a>
+  <h1 class="login-title" style="margin: 0; text-align: left; line-height: 1; display: inline-block;">
+    Registro de Donante
+  </h1>
+</div>
 
-  <div>
-    <%= f.label :peso_kg, "Peso (kg)" %><br>
-    <%= f.number_field :peso_kg, step: 0.1, required: true, min: 0 %>
-  </div>
+    <%= form_with model: @donante, local: true do |f| %>
+      
+      <% if @donante.errors.any? %>
+        <div class="errors-list">
+          <% @donante.errors.full_messages.each do |message| %>
+            <div class="error-item">• <%= message %></div>
+          <% end %>
+        </div>
+      <% end %>
 
-  <div>
-    <%= f.label :estatura_cm, "Estatura (cm)" %><br>
-    <%= f.number_field :estatura_cm, step: 0.1, required: true, min: 0 %>
-  </div>
+      <!-- Tipo Sanguíneo -->
+      <div class="input-group">
+        <%= f.label :tipo_sanguineo, "Tipo Sanguíneo", class: "input-label" %>
+        <div class="input-icon-container">
+          <%= f.select :tipo_sanguineo, 
+              ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], 
+              { prompt: "Seleccione su tipo de sangre" }, 
+              { class: "input-field input-field--dropdown", required: true } %>
+        </div>
+      </div>
 
-  <div>
-    <%= f.label :tiene_tatuajes, "¿Tiene tatuajes?" %><br>
-    <%= f.check_box :tiene_tatuajes %>
-  </div>
+      <!-- Peso y Estatura en la misma fila -->
+      <div style="display: flex; gap: 15px;">
+        <div class="input-group" style="flex: 1;">
+          <%= f.label :peso_kg, "Peso (kg)", class: "input-label" %>
+          <div class="input-icon-container">
+            <%= f.number_field :peso_kg, step: 0.1, required: true, min: 30, max: 300, 
+                class: "input-field", style: "padding-left: 15px;", placeholder: "Ej: 70.5" %>
+          </div>
+        </div>
 
-  <div>
-    <%= f.label :ult_donacion_fecha, "Última Donación (si hubo)" %><br>
-    <%= f.date_field :ult_donacion_fecha %>
-  </div>
+        <div class="input-group" style="flex: 1;">
+          <%= f.label :estatura_cm, "Estatura (cm)", class: "input-label" %>
+          <div class="input-icon-container">
+            <%= f.number_field :estatura_cm, step: 1, required: true, min: 100, max: 250, 
+                class: "input-field", style: "padding-left: 15px;", placeholder: "Ej: 175" %>
+          </div>
+        </div>
+      </div>
 
-  <!-- Medicamentos -->
-  <fieldset>
-    <legend>Medicamentos que está tomando (marque los que correspondan)</legend>
-    <% Medicamento.all.each do |med| %>
-      <div>
-        <%= check_box_tag "donante[medicamento_ids][]",
-                  med.id,
-                  @donante&.medicamento_ids&.include?(med.id),
-                  id: "medicamento_#{med.id}" %>
-        <%= label_tag "medicamento_#{med.id}", "#{med.nombre} #{med.descripcion.present? ? "(#{med.descripcion})" : ''}" %>
+      <!-- Tatuajes -->
+      <div class="input-group checkbox-group">
+        <label class="input-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+          <%= f.check_box :tiene_tatuajes, class: "custom-checkbox" %>
+          <span>¿Tiene tatuajes realizados en el último año?</span>
+        </label>
+      </div>
+
+      <!-- Última Donación con validación de fecha máxima -->
+      <div class="input-group">
+        <%= f.label :ult_donacion_fecha, "Fecha última donación (opcional)", class: "input-label" %>
+        <div class="input-icon-container">
+          <%= f.date_field :ult_donacion_fecha, 
+              class: "input-field", 
+              style: "padding-left: 15px;",
+              max: Date.current %> <!-- Esto bloquea fechas futuras -->
+        </div>
+      </div>
+
+      <!-- Medicamentos -->
+      <fieldset class="form-section">
+        <legend class="input-label section-title">Medicamentos actuales</legend>
+        <div class="scroll-list">
+          <% Medicamento.all.each do |med| %>
+            <label class="list-item">
+              <%= check_box_tag "donante[medicamento_ids][]", med.id, @donante&.medicamento_ids&.include?(med.id), id: "medicamento_#{med.id}" %>
+              <span><%= med.nombre %> <small>(<%= med.descripcion %>)</small></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <!-- Condiciones Crónicas -->
+      <fieldset class="form-section">
+        <legend class="input-label section-title">Condiciones crónicas</legend>
+        <div class="scroll-list">
+          <% CondicionCronica.all.each do |cond| %>
+            <label class="list-item">
+              <%= check_box_tag "donante[condiciones_cronica_ids][]", cond.id, @donante&.condiciones_cronica_ids&.include?(cond.id), id: "condicion_#{cond.id}" %>
+              <span><%= cond.nombre %></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+
+      <%= f.submit "Registrarse como Donante", class: "btn-primary" %>
+      
+      <div class="links">
+        <%= link_to "Cancelar y volver", root_path, class: "link-text" %>
       </div>
     <% end %>
-  </fieldset>
-
-  <!-- Condiciones Crónicas -->
-  <fieldset>
-    <legend>Condiciones crónicas (marque las que correspondan)</legend>
-    <% CondicionCronica.all.each do |cond| %>
-      <div>
-        <%= check_box_tag "donante[condiciones_cronica_ids][]", cond.id, @donante&.condiciones_cronica_ids&.include?(cond.id), id: "condicion_#{cond.id}" %>
-        <%= label_tag "condicion_#{cond.id}", cond.nombre %>
-      </div>
-    <% end %>
-  </fieldset>
-
-  <div>
-    <%= f.submit "Registrarse como Donante" %>
   </div>
-<% end %>
+</div>

@@ -229,3 +229,64 @@ input[type="date"]::-moz-calendar-picker-indicator {
 .input-field::placeholder {
   opacity: 0.5;
 }
+
+/* Estilos para secciones de Donante */
+.form-section {
+  border: 1px solid #eee;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  padding: 0 10px;
+  color: #ff383c;
+  font-weight: 700;
+}
+
+/* Lista con scroll para no hacer el card gigante */
+.scroll-list {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Personalización de scrollbar */
+.scroll-list::-webkit-scrollbar {
+  width: 5px;
+}
+.scroll-list::-webkit-scrollbar-thumb {
+  background: #ff383c;
+  border-radius: 10px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f9f9f9;
+  font-size: 0.85rem;
+  color: #555;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+}
+
+.list-item:hover {
+  background: #fffafa;
+}
+
+/* Checkboxes con el color del tema */
+input[type="checkbox"] {
+  accent-color: #ff383c;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-group {
+  margin: 1rem 0;
+  background: #fff5f5;
+  padding: 10px 15px;
+  border-radius: 49px;
+}

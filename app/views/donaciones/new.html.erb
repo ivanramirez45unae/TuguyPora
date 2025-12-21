@@ -1,95 +1,110 @@
-<%= form_with model: [@postulacion, @donacion], local: true do |f| %>
-
-  <h2 style="margin-bottom: 20px; color: #b30000; font-size: 28px; font-weight: bold;">
-    🩸 Registro de Donación
-  </h2>
-
-  <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+<div class="login-wrapper" style="align-items: flex-start; padding-top: 50px;">
+  <div class="login-card" style="width: 1000px; max-width: 95%;"> <!-- Ancho para dos columnas -->
     
-    <!-- DATOS DEL DONANTE -->
-    <div style="flex: 1; min-width: 350px; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-      <h3 style="color: #b30000;">🩺 Verificar datos del donante</h3>
-
-      <% donante = @postulacion.user.donante %>
-
-      <div style="margin-bottom: 15px">
-        <%= label_tag :tipo_sanguineo, 'Tipo sanguíneo' %><br>
-        <%= select_tag :tipo_sanguineo,
-             options_for_select(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], donante.tipo_sanguineo),
-             style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
-      </div>
-
-      <div style="margin-bottom: 15px">
-        <%= label_tag :peso_kg, 'Peso (kg)' %><br>
-        <%= number_field_tag :peso_kg, donante.peso_kg, step: 0.1, style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
-      </div>
-
-      <div style="margin-bottom: 15px">
-        <%= label_tag :estatura_cm, 'Estatura (cm)' %><br>
-        <%= number_field_tag :estatura_cm, donante.estatura_cm, step: 1, style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
-      </div>
-
-      <div style="margin-bottom: 20px">
-        <%= label_tag :tiene_tatuajes, '¿Tiene tatuajes recientes?' %><br>
-        <%= select_tag :tiene_tatuajes,
-             options_for_select([['Sí', true], ['No', false]], donante.tiene_tatuajes),
-             style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
-      </div>
-
-      <fieldset style="margin-bottom: 20px">
-        <legend style="font-weight: bold; margin-bottom: 10px">
-          💊 Medicamentos que está tomando (confirma con el paciente)
-        </legend>
-        <% Medicamento.all.each do |med| %>
-          <div style="margin-bottom: 5px">
-            <%= check_box_tag "donante_medicamentos[]", med.id, donante.medicamento_ids.include?(med.id), id: "medicamento_#{med.id}" %>
-            <%= label_tag "medicamento_#{med.id}", "#{med.nombre} #{med.descripcion.present? ? "(#{med.descripcion})" : ''}" %>
-          </div>
-        <% end %>
-      </fieldset>
-
-      <fieldset style="margin-bottom: 20px">
-        <legend style="font-weight: bold; margin-bottom: 10px">
-          🩺 Condiciones crónicas (confirma con el paciente)
-        </legend>
-        <% CondicionCronica.all.each do |cond| %>
-          <div style="margin-bottom: 5px">
-            <%= check_box_tag "donante_condiciones[]", cond.id, donante.condiciones_cronica_ids.include?(cond.id), id: "condicion_#{cond.id}" %>
-            <%= label_tag "condicion_#{cond.id}", cond.nombre %>
-          </div>
-        <% end %>
-      </fieldset>
+    <div class="header-inline" style="margin-bottom: 2rem;">
+      <h1 class="login-title" style="margin: 0; text-align: left;">Registro de Donación</h1>
     </div>
 
-    <!-- DATOS DE LA DONACIÓN -->
-    <div style="flex: 1; min-width: 350px; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-      <h3 style="color: #b30000;">📝 Datos de la Donacion</h3>
+    <%= form_with model: [@postulacion, @donacion], local: true do |f| %>
+      
+      <div style="display: flex; gap: 30px; align-items: flex-start;">
+        
+        <!-- COLUMNA IZQUIERDA: DATOS DEL DONANTE (Verificación) -->
+        <div style="flex: 1.2; background: #fdfdfd; padding: 20px; border-radius: 20px; border: 1px solid #eee;">
+          <h3 style="color: #ff383c; font-size: 1.2rem; margin-bottom: 20px; font-weight: 700;">Verificar datos del donante</h3>
+          
+          <% donante = @postulacion.user.donante %>
 
-      <div style="margin-bottom: 15px">
-        <%= f.label :fecha_donacion, 'Fecha de extracción' %><br>
-        <%= f.date_field :fecha_donacion, value: Date.today, style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="input-group">
+              <%= label_tag :tipo_sanguineo, 'Tipo sanguíneo', class: "input-label" %>
+              <%= select_tag :tipo_sanguineo,
+                   options_for_select(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], donante.tipo_sanguineo),
+                   class: "input-field input-field--dropdown" %>
+            </div>
+
+            <div class="input-group">
+              <%= label_tag :peso_kg, 'Peso (kg)', class: "input-label" %>
+              <%= number_field_tag :peso_kg, donante.peso_kg, step: 0.1, class: "input-field", style: "padding-left: 15px;" %>
+            </div>
+
+            <div class="input-group">
+              <%= label_tag :estatura_cm, 'Estatura (cm)', class: "input-label" %>
+              <%= number_field_tag :estatura_cm, donante.estatura_cm, step: 1, class: "input-field", style: "padding-left: 15px;" %>
+            </div>
+
+            <div class="input-group">
+              <%= label_tag :tiene_tatuajes, '¿Tatuajes recientes?', class: "input-label" %>
+              <%= select_tag :tiene_tatuajes,
+                   options_for_select([['Sí', true], ['No', false]], donante.tiene_tatuajes),
+                   class: "input-field input-field--dropdown" %>
+            </div>
+          </div>
+
+          <!-- Listas con Scroll para no alargar el form -->
+          <fieldset class="form-section" style="margin-top: 20px;">
+            <legend class="input-label section-title">Confirmar Medicamentos</legend>
+            <div class="scroll-list" style="max-height: 120px;">
+              <% Medicamento.all.each do |med| %>
+                <label class="list-item">
+                  <%= check_box_tag "donante_medicamentos[]", med.id, donante.medicamento_ids.include?(med.id), id: "medicamento_#{med.id}" %>
+                  <span><%= med.nombre %></span>
+                </label>
+              <% end %>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-section">
+            <legend class="input-label section-title">Confirmar Condiciones</legend>
+            <div class="scroll-list" style="max-height: 120px;">
+              <% CondicionCronica.all.each do |cond| %>
+                <label class="list-item">
+                  <%= check_box_tag "donante_condiciones[]", cond.id, donante.condiciones_cronica_ids.include?(cond.id), id: "condicion_#{cond.id}" %>
+                  <span><%= cond.nombre %></span>
+                </label>
+              <% end %>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- COLUMNA DERECHA: DATOS DE LA DONACIÓN -->
+        <div style="flex: 0.8; background: #fff5f5; padding: 25px; border-radius: 20px; border: 2px dashed #ff383c;">
+          <h3 style="color: #ff383c; font-size: 1.2rem; margin-bottom: 20px; font-weight: 700;">📝 Datos de la Donación</h3>
+
+          <div class="input-group">
+            <%= f.label :fecha_donacion, 'Fecha de extracción', class: "input-label" %>
+            <div class="input-icon-container">
+              <%= f.date_field :fecha_donacion, 
+                  value: Date.today, 
+                  max: Date.current, 
+                  class: "input-field", 
+                  style: "padding-left: 15px;", 
+                  required: true %>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :volumen_ml, 'Volumen extraído (ml)', class: "input-label" %>
+            <%= f.number_field :volumen_ml, min: 350, max: 550, class: "input-field", style: "padding-left: 15px;", placeholder: "Ej: 450" %>
+          </div>
+
+          <div class="input-group">
+            <%= f.label :tipo_sangre, 'Bolsa: Tipo de sangre', class: "input-label" %>
+            <%= f.select :tipo_sangre,
+              ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+              { selected: donante.tipo_sanguineo },
+              { class: "input-field input-field--dropdown" } %>
+          </div>
+
+          <%= f.hidden_field :verificado_por_usuario, value: current_user.id %>
+
+          <div style="margin-top: 40px;">
+            <%= f.submit 'Finalizar y Guardar', class: 'btn-primary', style: "width: 100%; margin: 0;" %>
+            <%= link_to 'Cancelar', centros_dashboard_path, class: 'link-text', style: "display: block; text-align: center; margin-top: 15px;" %>
+          </div>
+        </div>
+
       </div>
-
-      <div style="margin-bottom: 15px">
-        <%= f.label :volumen_ml, 'Volumen extraído (ml)' %><br>
-        <%= f.number_field :volumen_ml, min: 350, max: 550, style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" %>
-      </div>
-
-      <div style="margin-bottom: 15px">
-        <%= f.label :tipo_sangre, 'Tipo de sangre' %><br>
-        <%= f.select :tipo_sangre,
-          ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-          { selected: donante.tipo_sanguineo },
-          { style: "width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;" } %>
-      </div>
-
-      <%= f.hidden_field :verificado_por_usuario, value: current_user.id %>
-    </div>
+    <% end %>
   </div>
-
-  <div style="margin-top: 30px; display: flex; gap: 15px">
-    <%= f.submit 'Guardar todo', class: 'btn btn-warning' %>
-    <%= link_to 'Cancelar', centros_dashboard_path, class: 'btn btn-secondary' %>
-  </div>
-
-<% end %>
+</div>

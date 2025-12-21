@@ -48,21 +48,36 @@
           <h3><%= u.nombre %></h3>
 
           <% if current_user&.donante %>
+            <% # CASO 1: EL USUARIO YA ES DONANTE %>
             <%= link_to new_postulacion_path(ubicacion_id: u.id),
                         class: "donar-btn btn-primary btn-small-text" do %>
               <span class="donar-content">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                     fill="currentColor" class="bi bi-droplet-fill"
-                     viewBox="0 0 16 16">
+                    fill="currentColor" class="bi bi-droplet-fill"
+                    viewBox="0 0 16 16">
                   <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
                 </svg>
                 <span>Donar</span>
               </span>
             <% end %>
-          <% end %>
 
-          <% unless current_user&.donante %>
-            <p class="alert-msg">Debes registrarte como donante.</p>
+          <% else %>
+            <% # CASO 2: EL USUARIO NO ES DONANTE %>
+            <p class="alert-msg" style="margin-bottom: 10px; font-size: 13px; color: #666;">
+              Debes registrarte como donante para postularte.
+            </p>
+            
+            <%= link_to new_donante_path,
+                        class: "donar-btn btn-primary btn-small-text", 
+                        style: "background-color: #666;" do %>
+              <span class="donar-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                  <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                <span>Registrarme como donante</span>
+              </span>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -142,8 +157,10 @@
             <p id="modal-telefono" class="info-text"></p>
           </div>
 
-          <!-- Botón de acción -->
+          <!-- Botón de acción dentro del Modal -->
           <div class="modal-actions">
+            <% if current_user&.donante %>
+              <!-- CASO 1: ES DONANTE - Se muestra el botón de Donar (el JS actualizará el href) -->
               <a href="#" id="modal-btn-donar" class="donar-btn btn-primary btn-small-text">
                   <span class="donar-content">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -154,6 +171,18 @@
                       <span>Donar</span>
                   </span>
               </a>
+            <% else %>
+              <!-- CASO 2: NO ES DONANTE - Se muestra el botón gris de Registro -->
+              <%= link_to new_donante_path, 
+                    class: 'class="donar-btn btn-primary btn-small-text"', 
+                    style: 'background-color: #666 !important; display: flex; align-items: center; justify-content: center; margin: 0 auto; width: fit-content; text-decoration: none; gap: 8px; padding: 10px 20px;' do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                      <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                      <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                    </svg>
+                    Registrarme como donante
+                  <% end %>
+            <% end %>
           </div>
         </div>
       </div>

@@ -1,6 +1,14 @@
 es:
-  errors:
-    messages:
-      taken: "ya está en uso"
-      confirmation: "no coincide"
-      not_saved: "Inténtelo de nuevo:"
+  devise:
+    registrations:
+      signed_up: "¡Bienvenido! Te has registrado correctamente."
+      user:
+        signed_up: "¡Bienvenido! Tu cuenta de usuario ha sido creada con éxito."
+    sessions:
+      signed_in: "Sesión iniciada correctamente."
+      signed_out: "Sesión cerrada correctamente."
+    failure:
+      already_authenticated: "Ya has iniciado sesión."
+      unauthenticated: "Tienes que iniciar sesión o registrarte para poder continuar."
+      last_attempt: "Tienes un intento más antes de que tu cuenta sea bloqueada."
+      not_found_in_database: "Email o contraseña inválidos."
