@@ -1,6 +1,7 @@
 @import "devise";
 @import "perfil";
 @import "home";
+@import "solicitudes";
 
 html,
 body {

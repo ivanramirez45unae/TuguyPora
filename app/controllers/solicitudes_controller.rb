@@ -10,6 +10,7 @@ class SolicitudesController < ApplicationController
       "COUNT(DISTINCT donaciones.id) AS donaciones_count"
     )
     .group("solicitudes.id")
+    .order("solicitudes.created_at DESC")
   end
 
   def new

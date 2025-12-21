@@ -1,113 +1,179 @@
 <%= render 'shared/navbar' %>
 
-<div style="max-width: 1200px; margin: 40px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; padding: 0 15px;">
-
-  <h1 style="text-align: center; color: #2c3e50; margin-bottom: 35px; font-size: 30px; font-weight: 700;">
-    Solicitudes de sangre
-  </h1>
-
-  <div style="text-align: center; margin-bottom: 35px;">
-    <%= link_to '➕ Crear nueva solicitud', new_solicitud_path,
-          class: 'btn btn-danger',
-          style: 'padding: 12px 28px; font-weight: 600; font-size: 16px;' %>
-  </div>
-
-  <% if @solicitudes.any? %>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 28px;">
-      <% @solicitudes.each do |solicitud| %>
-        <% p_count = solicitud.postulaciones_pendientes_count.to_i
-           d_count = solicitud.donaciones_count.to_i %>
-
-        <div style="
-          background: #fff;
-          border-radius: 14px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-        ">
-
-          <!-- Encabezado gris claro con autor -->
-          <div style="background: #f7f7f7; padding: 12px 20px;">
-            <p style="margin: 0; font-size: 13px; color: #666;">
-              📢 Publicado por <strong><%= solicitud.user.nombre %></strong>
-            </p>
-          </div>
-
-          <!-- Cuerpo principal -->
-          <div style="padding: 22px 20px; flex-grow: 1;">
-            <h3 style="margin-top: 0; margin-bottom: 10px; font-size: 20px; color: #2c3e50; font-weight: 700;">
-              👤 Paciente: <span style="color: #b71c1c;"><%= solicitud.nombre_paciente %></span>
-            </h3>
-
-            <div style="font-size: 15px; line-height: 1.55;">
-              <p style="margin: 4px 0;"><strong>🆔 C.I.N.:</strong> <%= solicitud.cin_paciente %></p>
-              <p style="margin: 4px 0;"><strong>💉 Tipo de Sangre:</strong> <%= solicitud.tipo_sangre %></p>
-              <p style="margin: 4px 0;"><strong>📍 Ubicación:</strong> <%= solicitud.ubicacion.nombre %></p>
-              <p style="margin: 4px 0;"><strong>🧑‍🤝‍🧑 Donantes requeridos:</strong> <%= solicitud.donantes_requeridos %></p>
-              <p style="margin: 6px 0 0;"><strong>📝 Detalles:</strong> <%= solicitud.detalles.presence || 'Sin detalles adicionales' %></p>
-            </div>
-
-            <!-- Estado como badges -->
-            <div style="margin-top: 16px;">
-              <span style="
-                background: #b71c1c;
-                color: #fff;
-                padding: 4px 10px;
-                border-radius: 20px;
-                font-size: 13px;
-                margin-right: 6px;
-              ">
-                <%= d_count.positive? ? "#{d_count} donaciones confirmadas" : "0 donaciones" %>
-              </span>
-              <span style="
-                background: #e67e22;
-                color: #fff;
-                padding: 4px 10px;
-                border-radius: 20px;
-                font-size: 13px;
-              ">
-                <%= p_count.positive? ? "#{p_count} postulaciones" : "0 postulaciones" %>
-              </span>
-            </div>
-          </div>
-
-          <!-- Pie con acciones -->
-          <div style="padding: 18px 20px; border-top: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px;">
-            <% if solicitud.user == current_user %>
-              <%= link_to '✏️ Editar', edit_solicitud_path(solicitud),
-                    class: 'btn btn-outline-primary',
-                    style: 'flex: 1 1 120px;' %>
-
-              <%= button_to '🗑️ Eliminar', solicitud_path(solicitud), method: :delete,
-                    form: { data: { confirm: '¿Estás seguro que deseas eliminar esta solicitud?' } },
-                    class: 'btn btn-outline-danger',
-                    style: 'flex: 1 1 120px;' %>
-            <% else %>
-              <% if current_user&.rol == "user" && current_user.donante %>
-                <%= link_to '❤️ Donar', new_postulacion_path(solicitud_id: solicitud.id),
-                    style: 'display: inline-block; width: 100%; padding: 10px 0;
-                            background: #b71c1c; color: #fff; text-align: center;
-                            border: none; border-radius: 8px; font-weight: 600;
-                            font-size: 15px; text-decoration: none;
-                            transition: background 0.3s ease, transform 0.2s ease;',
-                    onmouseover: "this.style.background='#9e1919'; this.style.transform='translateY(-2px)'",
-                    onmouseout: "this.style.background='#b71c1c'; this.style.transform='translateY(0)'" %>
-
-              <% elsif current_user&.rol == "user" && !current_user.donante %>
-                <%= link_to 'Registrarse como donante', new_donante_path,
-                    class: 'btn btn-warning',
-                    style: 'flex: 1 1 100%;' %>
-                <p style="color: #c62828; font-size: 13px; width: 100%; margin: 4px 0 0;">
-                  ⚠️ Debes ser donante para postularte.
-                </p>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+<div class="solicitudes-body">
+  
+  <!-- Header con Título, Botón Nuevo y Buscador -->
+  <div class="solicitudes-header">
+    <div class="header-left-group">
+      <h1 class="val-bold" style="font-size: 32px;">Solicitudes de sangre</h1>
+      <%= link_to new_solicitud_path, class: 'btn-nueva-solicitud' do %>
+        <span style="font-size: 20px;">+</span> Nueva solicitud
       <% end %>
     </div>
-  <% else %>
-    <p style="text-align: center; font-size: 18px; color: #777;">No hay solicitudes aún.</p>
-  <% end %>
+
+    <div class="search-container">
+      <div class="search-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-search search-icon" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg>
+        <!-- ID Unico para el buscador de solicitudes -->
+        <input type="text" id="search-solicitud" class="search-input" placeholder="Buscar nombre del paciente" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div id="solicitudes-lista-container">
+    <% if @solicitudes.any? %>
+      <% @solicitudes.each do |solicitud| %>
+        <% p_count = solicitud.postulaciones_pendientes_count.to_i %>
+        <% d_count = solicitud.donaciones_count.to_i %>
+
+        <!-- Contenedor principal de la tarjeta (IMPORTANTE: clase solicitud-card-container) -->
+        <div class="solicitud-card-container">
+          
+          <!-- Fila de Solicitud -->
+          <div class="request-row">
+            
+            <!-- Columna 1: Paciente -->
+            <div class="request-col col-paciente">
+              <span class="label-muted">Para:</span>
+              <p class="val-patient-name"><%= solicitud.nombre_paciente %></p>
+              <div style="margin-top: 18px;">
+                <span class="label-muted">C.I.Nº:</span><br>
+                <span class="val-cin"><%= solicitud.cin_paciente %></span>
+              </div>
+            </div>
+
+            <!-- Columna 2: Hospital -->
+            <div class="request-col col-hospital">
+              <span class="label-muted">En:</span>
+              <p class="val-hospital-name"><%= solicitud.ubicacion.nombre %></p>
+              <div style="margin-top: 18px;">
+                <span class="label-muted--blood">Tipo de sangre requerido:</span>
+                <span class="val-blood-type"><%= solicitud.tipo_sangre %></span>
+              </div>
+            </div>
+
+            <!-- Columna 3: Detalles -->
+            <div class="request-col col-detalles">
+              <span class="label-muted">Detalles:</span>
+              <div class="details-white-box">
+                <%= solicitud.detalles.presence || 'No hay detalles' %>
+              </div>
+            </div>
+
+            <!-- Columna 4: Stats -->
+            <div class="request-col col-stats">
+              <div class="stat-item">
+                <span class="label-muted">Donantes requeridos:</span>
+                <span class="stat-value"><%= solicitud.donantes_requeridos %></span>
+              </div>
+              <div class="stat-item" style="margin-top: 5px;">
+                <span class="label-muted">Donaciones:</span>
+                <span class="stat-value"><%= d_count %></span>
+              </div>
+              <div class="stat-item" style="margin-top: 5px;">
+                <span class="label-muted">Postulaciones:</span>
+                <span class="stat-value"><%= p_count %></span>
+              </div>
+            </div>
+
+            <!-- Columna 5: Acciones -->
+            <div class="request-col col-btns">
+              <% if solicitud.user == current_user %>
+                <%= link_to 'Editar', edit_solicitud_path(solicitud), class: 'btn-solicitud-share' %>
+                
+                <%= button_to solicitud_path(solicitud), 
+                    method: :delete, 
+                    class: 'btn-solicitud-share', 
+                    style: 'color: #c62828 !important; margin-top: 5px; background: none; border: 1px solid #ddd; cursor: pointer;',
+                    form: { data: { turbo_confirm: "¿Está seguro de que desea eliminar esta solicitud?" } } do %>
+                    Eliminar
+                <% end %>
+
+              <% else %>
+                <%= link_to new_postulacion_path(solicitud_id: solicitud.id), class: 'btn-solicitud-donar' do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-droplet-fill" viewBox="0 0 16 16">
+                    <path d="M8 16a6 6 0 0 0 6-6c0-1.655-1.122-2.904-2.432-4.362C10.254 4.176 8.75 2.503 8 0c0 0-6 5.686-6 10a6 6 0 0 0 6 6M6.646 4.646l.708.708c-.29.29-1.128 1.311-1.907 2.87l-.894-.448c.82-1.641 1.717-2.753 2.093-3.13"/>
+                  </svg>
+                  Donar
+                <% end %>
+                <!-- <a href="#" class="btn-solicitud-share">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="black"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+                  Compartir
+                </a> -->
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Info de autor debajo de la card -->
+          <div class="request-footer">
+            <span>Publicado por: <strong><%= solicitud.user.nombre %></strong></span>
+            <span style="display: flex; align-items: center; gap: 5px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+              </svg>
+              <%= time_ago_in_words(solicitud.created_at) %>
+            </span>
+          </div>
+        </div> 
+
+      <% end %>
+
+      <!-- Mensaje de búsqueda vacía (fuera del loop) -->
+      <div id="no-results-solicitudes" style="display: none; text-align: center; margin-top: 50px; color: #777; width: 100%;">
+        <p style="font-size: 18px;">No se encontraron pacientes con ese nombre.</p>
+      </div>
+
+    <% else %>
+      <p style="text-align: center; font-size: 18px; color: #777; margin-top: 50px;">No hay solicitudes de sangre activas en este momento.</p>
+    <% end %>
+  </div>
 </div>
+
+<script>
+  /**
+   * LIVE SEARCH PARA SOLICITUDES
+   * Encapsulado para evitar conflictos con otras vistas
+   */
+  (function() {
+    const logicBusquedaSolicitudes = () => {
+      const input = document.getElementById('search-solicitud');
+      const tarjetas = document.querySelectorAll('.solicitud-card-container');
+      const mensajeVacio = document.getElementById('no-results-solicitudes');
+
+      // Si el input no existe en esta página, no ejecutar nada
+      if (!input) return;
+
+      input.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        let contadorVisibles = 0;
+
+        tarjetas.forEach(tarjeta => {
+          // Buscamos el nombre del paciente dentro de la tarjeta
+          const nombrePaciente = tarjeta.querySelector('.val-patient-name').textContent.toLowerCase();
+          
+          if (nombrePaciente.includes(query)) {
+            tarjeta.style.display = ""; // Vuelve al estado original (mostrar)
+            contadorVisibles++;
+          } else {
+            tarjeta.style.display = "none"; // Oculta tarjeta y footer
+          }
+        });
+
+        // Mostrar u ocultar mensaje de "no resultados"
+        if (mensajeVacio) {
+          mensajeVacio.style.display = (contadorVisibles === 0) ? "block" : "none";
+        }
+      });
+    };
+
+    // Escuchar el evento de carga de Turbo (Rails 7)
+    document.addEventListener('turbo:load', logicBusquedaSolicitudes);
+
+    // Ejecutar una vez al inicio por si acaso
+    logicBusquedaSolicitudes();
+  })();
+</script>
