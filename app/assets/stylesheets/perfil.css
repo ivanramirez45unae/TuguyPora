@@ -125,20 +125,6 @@
   color: var(--primary-red);
   font-weight: 700;
 }
-
-/* --- BARRA VERDE --- */
-.status-bar {
-  background-color: #ccff90;
-  color: #000;
-  font-weight: 700;
-  text-align: center;
-  padding: 15px;
-  border-radius: 12px;
-  margin-top: 10px;
-  font-size: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
 /* --- CONTENIDO DINÁMICO --- */
 .content-section {
   display: none;
@@ -263,6 +249,16 @@
   margin-top: -5px;
   margin-bottom: 15px;
   display: block;
+}
+
+/* Estilo para botones deshabilitados */
+.stat-disabled {
+  opacity: 0.4; /* Lo vuelve opaco */
+  cursor: not-allowed; /* Cambia el cursor a un círculo tachado */
+  pointer-events: none; /* Deshabilita cualquier evento de clic de JS */
+  filter: grayscale(
+    100%
+  ); /* Opcional: le quita el color para que se vea más 'apagado' */
 }
 
 /* --- RESPONSIVE --- */

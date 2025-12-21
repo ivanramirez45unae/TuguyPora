@@ -1,0 +1,103 @@
+/* Contenedor general */
+.donation-item-wrapper {
+  margin-bottom: 25px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* La caja gris de Figma */
+.donation-card-figma {
+  background-color: #dbdbdb; /* Color gris de la imagen */
+  border-radius: 30px; /* Bordes muy redondeados */
+  padding: 25px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Columnas */
+.donation-col {
+  flex: 1;
+}
+
+.donation-col p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.8;
+}
+
+.donation-col strong {
+  font-weight: 800; /* Texto bien negrita como en la imagen */
+}
+
+/* Divisor vertical */
+.donation-divider {
+  width: 1px;
+  height: 120px;
+  background-color: #b0b0b0;
+}
+
+/* Footer (Texto debajo de la caja) */
+.donation-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 25px;
+  padding: 8px 30px 0 0;
+  font-size: 13px;
+  color: #444;
+}
+
+.footer-date {
+  display: flex;
+  align-items: center;
+}
+
+/* Clase base con tus especificaciones */
+.status-bar {
+  text-align: center;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: block; /* Para que ocupe todo el ancho */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Colores dinámicos */
+.status-enabled {
+  background-color: #ccff90; /* El verde que pediste */
+}
+
+.status-waiting {
+  background-color: #fff59d; /* Amarillito */
+}
+
+.status-register {
+  background-color: #ffcdd2; /* Rojito suave para que el texto negro legue bien */
+}
+
+/* Estilo para el link de registro dentro de la barra roja */
+.status-bar a {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Responsive: si la pantalla es chica, se pone uno abajo de otro */
+@media (max-width: 768px) {
+  .donation-card-figma {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .donation-divider {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0;
+  }
+}

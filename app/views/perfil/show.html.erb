@@ -29,10 +29,10 @@
         <div class="user-header">
           <h1 class="user-name"><%= @user.nombre %></h1>
           <!-- Icono Lápiz -->
-          <svg style="width:18px; height:18px; cursor:pointer; opacity:0.6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <!-- <svg style="width:18px; height:18px; cursor:pointer; opacity:0.6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
+          </svg> -->
         </div>
 
         <!-- Estadísticas INTERACTIVAS (Justo debajo del nombre) -->
@@ -45,15 +45,22 @@
           </div>
 
           <!-- Botón Donaciones -->
-          <div class="stat-btn" onclick="switchSection('donaciones', this)">
-            <div class="stat-value"><%= @donante ? @donaciones_count : "0" %></div>
+          <div class="stat-btn <%= 'stat-disabled' if @donante.nil? %>" 
+              <% if @donante.present? %> onclick="switchSection('donaciones', this)" <% end %>>
+            <div class="stat-value">
+              <%= @donante.present? ? @donaciones_count : "--" %>
+            </div>
             <div class="stat-label">Donaciones</div>
           </div>
 
           <!-- Botón Postulaciones -->
-          <div class="stat-btn" onclick="switchSection('postulaciones', this)">
-            <div class="stat-value"><%= @postulaciones.count %></div>
-            <div class="stat-label">Postulación</div>
+          <div class="stat-btn <%= 'stat-disabled' if @donante.nil? %>" 
+              <% if @donante.present? %> onclick="switchSection('postulaciones', this)" <% end %>>
+            <div class="stat-value">
+              <% # Filtramos las postulaciones para contar solo las que tienen estado 'P' %>
+              <%= @donante.present? ? @postulaciones.count { |p| p.estado == "P" } : "--" %>
+            </div>
+            <div class="stat-label">Postulaciones</div>
           </div>
 
         </div>
@@ -62,14 +69,42 @@
     </div> <!-- Fin header-layout -->
 
     <!-- 3. BARRA VERDE (Full Width abajo) -->
-    <% if @donante %>
-      <div class="status-bar">
-        ¡Estás habilitado por donar!
-      </div>
-    <% end %>
+    <div class="status-bar-container">
+      <% if @donante %>
+        <% if @donante.ult_donacion_fecha.present? %>
+          <% # Lógica de meses según género %>
+          <% meses_espera = (@donante.user.genero == "Femenino" || @donante.user.genero == "Mujer") ? 4 : 3 %>
+          <% fecha_prox = @donante.ult_donacion_fecha.advance(months: meses_espera) %>
 
+          <% if Date.today >= fecha_prox %>
+            <!-- CASO 1: Ya pasó el tiempo de espera (VERDE) -->
+            <div class="status-bar status-enabled">
+              ¡Estás habilitado para donar!
+            </div>
+          <% else %>
+            <!-- CASO 2: Todavía debe esperar (AMARILLO) -->
+            <div class="status-bar status-waiting">
+              Podés volver a donar a partir del <strong><%= l(fecha_prox, format: "%d de %B del %Y") %></strong>.
+            </div>
+          <% end %>
+
+        <% else %>
+          <!-- CASO 3: Es donante pero nunca ha registrado una donación (VERDE) -->
+          <div class="status-bar status-enabled">
+            ¡Estás habilitado para donar!
+          </div>
+        <% end %>
+
+      <% else %>
+        <!-- CASO 4: No es donante (ROJO) -->
+        <div class="status-bar status-register">
+            Aún no estás registrado como donante.
+          <%= link_to 'Registrarme ahora', new_donante_path, class: "btn-register-link" %>
+        </div>
+      <% end %>
+    </div>
     <!-- 4. CONTENIDO DESPLEGABLE (Abajo del todo) -->
-    
+
     <!-- FICHA MÉDICA -->
     <div id="ficha" class="content-section active" style="background: #F9F9F9; padding: 30px; border-radius: 12px;">
     
@@ -119,10 +154,10 @@
         <div><span class="label-bold">Teléfono:</span> <%= @user.num_telefono %></div>
       </div>
     </div>
-
+    
+    <% if @donante %>
     <!-- LÍNEA SEPARADORA -->
     <div class="horizontal-divider"></div>
-
     <!-- === SECCIÓN 2: FICHA MÉDICA === -->
     <h3 class="section-header">Ficha médica</h3>
     
@@ -225,33 +260,121 @@
     </div>
 
   </div>
+  <% end %>
 
     <!-- DONACIONES -->
     <div id="donaciones" class="content-section">
-      <h3 style="margin-bottom:20px; color:#333;">🩸 Historial de Donaciones</h3>
       <% if @donaciones.any? %>
-        <% @donaciones.each_with_index.reverse_each do |d, i| %>
-           <div style="padding:15px; border:1px solid #eee; margin-bottom:10px; border-radius:8px;">
-             <strong>Donación #<%= i+1 %></strong> - <%= d.fecha_donacion.strftime("%d/%m/%Y") %>
-           </div>
+        <% # Calculamos el total para que el contador sea correcto al usar reverse %>
+        <% total = @donaciones.count %>
+        
+        <% @donaciones.order(fecha_donacion: :desc).each_with_index do |d, index| %>
+          <% numero_donacion = total - index %>
+          
+          <div class="donation-item-wrapper">
+            <!-- Caja Principal Gris -->
+            <div class="donation-card-figma">
+              
+              <!-- Columna Izquierda -->
+              <div class="donation-col">
+                <p>Fecha: <strong><%= d.fecha_donacion.strftime("%d/%m/%Y") %></strong></p>
+                <p>Lugar: <strong><%= d.ubicacion&.nombre || "No especificado" %></strong></p>
+                <p>Volumen: <strong><%= d.volumen_ml %> ml</strong></p>
+                <p>Tipo de sangre: <strong><%= d.tipo_sangre %></strong></p>
+              </div>
+
+              <!-- Línea Divisoria Vertical -->
+              <div class="donation-divider"></div>
+
+              <!-- Columna Derecha -->
+              <div class="donation-col">
+                <p>Tipo de donación: 
+                  <strong>
+                    <% if d.solicitud_id.present? %>
+                      Por reposición (Para <%= d.solicitud.nombre_paciente %>)
+                    <% else %>
+                      Voluntaria
+                    <% end %>
+                  </strong>
+                </p>
+                <p>Verificado por: <strong><%= d.ubicacion&.nombre %></strong></p>
+              </div>
+            </div>
+
+            <!-- Footer de la Card -->
+            <div class="donation-card-footer">
+              <span>Donación Nº <%= numero_donacion %> de: <%= d.user.nombre %></span>
+              <span class="footer-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16" style="margin-right: 4px;">
+                  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                </svg>
+                <%= d.fecha_donacion.strftime("%d/%m/%y") %>
+              </span>
+            </div>
+          </div>
         <% end %>
+
       <% else %>
-         <p style="color:#777;">No hay donaciones registradas.</p>
+        <p style="color:#777; text-align: center; margin-top: 20px;">No hay donaciones registradas.</p>
       <% end %>
     </div>
 
     <!-- POSTULACIONES -->
     <div id="postulaciones" class="content-section">
-      <h3 style="margin-bottom:20px; color:#333;">📝 Postulaciones Pendientes</h3>
+      <% # Filtramos solo las pendientes (Estado 'P') %>
       <% pendientes = @postulaciones.select { |p| p.estado == "P" } %>
+
       <% if pendientes.any? %>
         <% pendientes.each do |p| %>
-           <div style="background:#FFF8E1; padding:15px; margin-bottom:10px; border-radius:8px;">
-             Solicitud para el <strong><%= p.fecha_tentativa %></strong>
-           </div>
+          
+          <div class="donation-item-wrapper">
+            <!-- Reutilizamos la caja gris de Donaciones -->
+            <div class="donation-card-figma">
+              
+              <!-- Columna Izquierda -->
+              <div class="donation-col">
+                <p>Fecha tentativa: <strong><%= p.fecha_tentativa.strftime("%d/%m/%Y") %></strong></p>
+                
+                <% # Asumiendo que tienes un campo hora_tentativa, si no, usa created_at %>
+                <p>Hora tentativa: <strong><%= p.respond_to?(:hora_tentativa) ? p.hora_tentativa.strftime("%H:%M hs.") : p.created_at.strftime("%H:%M hs.") %></strong></p>
+                
+                <p>Lugar: <strong><%= p.solicitud&.ubicacion&.nombre || p.ubicacion&.nombre %></strong></p>
+              </div>
+
+              <!-- Línea Divisoria Vertical -->
+              <div class="donation-divider"></div>
+
+              <!-- Columna Derecha -->
+              <div class="donation-col">
+                <p>Tipo de postulación: 
+                  <strong>
+                    <% if p.solicitud_id.present? %>
+                      Por reposición (Para <%= p.solicitud.nombre_paciente %>)
+                    <% else %>
+                      Voluntaria
+                    <% end %>
+                  </strong>
+                </p>
+              </div>
+            </div>
+
+            <!-- Footer de la Card Postulación -->
+            <div class="donation-card-footer">
+              <span>Postulación de: <%= p.user.nombre %></span>
+              <span class="footer-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16" style="margin-right: 4px;">
+                  <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                </svg>
+                <%= p.created_at.strftime("%d/%m/%y") %>
+              </span>
+            </div>
+          </div>
+
         <% end %>
       <% else %>
-        <p style="color:#777;">No hay postulaciones pendientes.</p>
+        <p style="color:#777; text-align: center; margin-top: 20px;">No hay postulaciones pendientes.</p>
       <% end %>
     </div>
 

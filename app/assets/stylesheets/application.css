@@ -2,6 +2,7 @@
 @import "perfil";
 @import "home";
 @import "solicitudes";
+@import "perfildonacion";
 
 html,
 body {
