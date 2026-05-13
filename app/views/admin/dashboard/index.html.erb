@@ -29,10 +29,6 @@
             <td style="padding: 12px;">
               <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
                 <%= link_to '✏️ Editar', edit_admin_user_path(u), class: 'btn btn-outline-primary btn-sm' %>
-                <%= button_to '🚫 Desactivar', deactivate_admin_user_path(u),
-                      method: :patch,
-                      data: { confirm: '¿Desactivar usuario?' },
-                      class: 'btn btn-outline-warning btn-sm' %>
                 <%= button_to '🗑️ Eliminar', admin_user_path(u),
                       method: :delete,
                       data: { confirm: '¿Eliminar usuario?' },
