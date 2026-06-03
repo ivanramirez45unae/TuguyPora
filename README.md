@@ -1,14 +1,12 @@
 # PlataformaDonacionSangre
 
-Plataforma digital para la optimización y promoción de la donación de sangre en el departamento de Itapúa - 2025
+Prototipo de plataforma web para la gestión centralizada de pedidos de donación de sangre en el departamento de Itapúa - 2025
 
-# 🩸 App de Donación de Sangre
-
-Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestionar campañas, donantes y solicitudes de sangre.
+Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestionar solicitudes, aportes y dnonantes de sangre.
 
 ---
 
-## ⚙️ Tecnologías
+## Tecnologías
 
 - Ruby on Rails  
 - HTML, CSS, JavaScript  
@@ -16,16 +14,18 @@ Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestio
 
 ---
 
-## 🧱 Funcionalidades
+## Funcionalidades
 
-- Registro de donantes  
-- Gestión de campañas
-- Registro de centros
-- Solicitudes y seguimiento
+- Registro e inicio de sesión de usuarios.
+- Publicación y gestión de solicitudes de donación de sangre.
+- Postulación a donar.
+- Consulta de información sobre requisitos y condiciones para la donación.
+- Visualización del estado de las solicitudes de sangre.
+- Historial de donaciones realizadas por los usuarios.
 
 ---
 
-## 👤 Usuarios de prueba (EMAIL Y CONTRASEÑA)
+## Usuarios de prueba (EMAIL Y CONTRASEÑA)
 
 - **Admin:**  
   `admin@tuapp.com` / `admin12345`  
@@ -36,7 +36,7 @@ Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestio
 
 ---
 
-## 🚀 Cómo ejecutar
+## Cómo ejecutar
 
 ```bash
 git clone https://github.com/usuario/repositorio.git
