@@ -14,13 +14,12 @@ class SolicitudesController < ApplicationController
   end
 
   def new
-    # Aquí puedes renderizar el formulario para crear una solicitud
     @solicitud = Solicitud.new
   end
 
   def create
     @solicitud = Solicitud.new(solicitud_params)
-    @solicitud.user_id = current_user.id # si tienes autenticación con devise
+    @solicitud.user_id = current_user.id
 
     if @solicitud.save
       redirect_to solicitudes_path, notice: "Solicitud creada exitosamente."
@@ -60,7 +59,7 @@ class SolicitudesController < ApplicationController
   def solicitud_params
     params.require(:solicitud).permit(
       :nombre_paciente,
-      :cin_paciente, # ojo: tu modelo tiene "cin_paciente", pero tu formulario usa "cedula_paciente"
+      :cin_paciente,
       :tipo_sangre,
       :location_id,
       :donantes_requeridos,
