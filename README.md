@@ -36,6 +36,17 @@ Aplicación web hecha en **Ruby on Rails** con arquitectura **MVC**, para gestio
 
 ---
 
+## Documentación
+
+La carpeta `docs` contiene material complementario del proyecto:
+
+- Diagramas del sistema (casos de uso, clases, secuencia, etc.).
+- Mockups y prototipos de interfaz.
+- Manual de usuario.
+- Documentación técnica del sistema.
+
+---
+
 ## Cómo ejecutar
 
 ```bash
@@ -44,3 +55,4 @@ cd repositorio
 bundle install
 rails db:create db:migrate
 rails server
+```
