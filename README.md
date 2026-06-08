@@ -44,6 +44,3 @@ cd repositorio
 bundle install
 rails db:create db:migrate
 rails server
-
- ## Documentación
-La carpeta `docs/` contiene los diagramas, mockups, manual de usuario y documentación técnica del proyecto.
